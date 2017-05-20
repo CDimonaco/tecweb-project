@@ -28,7 +28,6 @@ class UserService:
         print("Insertion completed",insertionResult.inserted_id)
         return insertionResult.inserted_id
 
-
     def deleteOne(self,id):
         #Questo metodo elimina un utente
         deleteResult = self.collection.delete_one({"_id" : ObjectId(id)})
@@ -38,5 +37,10 @@ class UserService:
         return True
 
     def findOne(self,filter):
-       #Questo metodo
-       pass
+       #Questo metodo ritorna un solo utente dal database secondo i filtri inseriti
+       userQuery = self.collection.findOne(filter.getConditions())
+       if not userQuery.acknowledged:
+           #TODO:ADD LOG TO FLASK
+           raise UserNotFoundError
+       userFound = User.to_model(userQuery)
+       return userFound

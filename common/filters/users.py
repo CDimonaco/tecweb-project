@@ -17,7 +17,7 @@ class UserFilter:
         self.email = email
 
 
-    def getCondition(self):
+    def getConditions(self):
         filterDict = {}
         if self.username is not None:
             filterDict["username"] = self.username
