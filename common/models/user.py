@@ -16,7 +16,7 @@ class User:
     @staticmethod
     def from_model(appuser):
         mongoDict = {
-            "username" : appuser.name,
+            "username" : appuser.username,
             "password" : appuser.password,
             "role" : appuser.role,
             "email" : appuser.email,
