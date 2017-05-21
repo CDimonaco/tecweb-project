@@ -28,6 +28,5 @@ class Sensor:
             "name" : appsensor.name,
             "apikey" : appsensor.apikey,
             "project" : appsensor.project,
-            "values" : []
         }
         return sensorDict

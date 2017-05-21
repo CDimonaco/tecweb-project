@@ -1,3 +1,5 @@
+import dateutil.parser
+
 class Project:
     def __init__(self,name,description,createdAt,id=""):
         self.id = id
@@ -18,7 +20,7 @@ class Project:
 
     @staticmethod
     def to_model(mongoproject):
-        return Project(id=str(mongoproject["_id"]),name=mongoproject["name"],description=mongoproject["description"],createdAt=mongoproject["createdAt"])
+        return Project(id=str(mongoproject["_id"]),name=mongoproject["name"],description=mongoproject["description"],createdAt=dateutil.parser.parse(mongoproject["createdAt"]))
     #TODO:Add date object for createdAt, convert from ISOString to datetime.date, also in from_model static method
 
     @staticmethod

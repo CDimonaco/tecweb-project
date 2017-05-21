@@ -1,6 +1,7 @@
 from unittest import TestCase
 from pymongo import MongoClient
 import datetime
+import dateutil.parser
 from common.models.user import User
 from common.models.value import Value
 from common.models.sensor import Sensor
@@ -68,8 +69,8 @@ class TestSensorService(TestCase):
         print(insertedid)
 
     def test_findsensor(self):
-        filter = SensorFilter(id="591ffa3547488822d7b70813")
-        expectedsensor = Sensor(id="591ffa3547488822d7b70813",name="Temperatura 01",project="591ff9458e2b82f3872c111b",apikey="abcdefghilmnopqrstuvz1245")
+        filter = SensorFilter(id="5921b94def43d2175f441558")
+        expectedsensor = Sensor(id="5921b94def43d2175f441558",name="Testsensor",project="591ff9458e2b82f3872c111b",apikey="8598984908092083098093")
         try:
             sensorfound = self.service.find(filter=filter)
         except SensorNotFoundError:
@@ -94,4 +95,14 @@ class TestSensorService(TestCase):
             self.fail(ValueAddError)
 
         print(insertedid)
+
+    def test_getvalues(self):
+        expectedvalue = Value(value=893.288,timestamp=dateutil.parser.parse("2016-04-01T10:30:36.438Z"),additional="",id="591ffa1d8e2b82f3872c111c")
+        filter = ValueFilter()
+        try:
+            values = self.service.getvalues(filter=filter)
+        except ValueNotFoundError:
+            self.fail(ValueNotFoundError)
+
+        print(values[0])
 

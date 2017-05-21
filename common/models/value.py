@@ -1,3 +1,5 @@
+import dateutil.parser
+from bson.objectid import ObjectId
 class Value:
     def __init__(self,value,timestamp,additional="",id=""):
         self.id = id
@@ -21,11 +23,12 @@ class Value:
 
     @staticmethod
     def to_model(mongovalue):
-        return Value(id=str(mongovalue["_id"]),value=mongovalue["value"],additional=mongovalue["additional"],timestamp=mongovalue["timestamp"])
+        return Value(id=str(mongovalue["id"]),value=mongovalue["value"],additional=mongovalue["additional"],timestamp=mongovalue["timestamp"])
 
     @staticmethod
     def from_model(appvalue):
         mongoDict = {
+            "id" : ObjectId(),
             "value" : appvalue.value,
             "additional" : appvalue.additional,
             "timestamp" : appvalue.timestamp

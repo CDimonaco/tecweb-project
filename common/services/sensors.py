@@ -71,6 +71,7 @@ class SensorService:
         :param filter: ValueFilter
         :return: Lista di valori rilevati
         """
-        valuesquery = self.collection.find(filter.getConditions())
-        valueslist = [Sensor.to_model(value) for value in valuesquery]
+        valuesquery = self.collection.find(projection={"_id":False,"name":False,"apikey":False,"project":False},filter=filter.getConditions())
+        valueslist = [Value.to_model(value["values"][0]) for value in valuesquery]
         return valueslist
+    #TODO:ADD RESET SENSOR delete all values
