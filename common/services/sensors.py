@@ -52,16 +52,18 @@ class SensorService:
 
     def setvalue(self,sensorid,value):
         """
-        Questo metodo aggiunge un valore rilevato ad un sensore.
+        Questo metodo aggiunge un valore rilevato ad un sensore, l'ordine dei valori è per timestamp,
+        aggiungendo un nuovo valore all'array dobbiamo anche usare l'operatore $sort per mantenere l'ordine
         :param sensorid: Id del sensore a cui aggiungere una rilevazione
-        :return: True
+        :return: Id del sensore a cui è stata aggiunta una rilevazione
         """
         valuetoadd = Value.from_model(value)
-        insertionResult = self.collection.update_one({"_id": ObjectId(sensorid)}, {"$push": {"values": valuetoadd}})
-        if not insertionResult.acknowledged:
+        insertionResult = self.collection.update_one({"_id": ObjectId(sensorid)}, {"$push": {"values": {"$each":[valuetoadd],"$sort":{"timestamp":-1}}}})
+        #insertionResult = self.collection.update_one({"_id": ObjectId(sensorid)}, {"$push": {"values":valuetoadd}})
+        if not insertionResult.acknowledged or insertionResult.modified_count < 0:
             raise ValueAddError
-        print("Insertion completed", insertionResult.upserted_id)
-        return insertionResult.upserted_id
+        print("Insertion completed to sensor", sensorid)
+        return sensorid
 
     def getvalues(self,filter):
         """

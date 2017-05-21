@@ -28,10 +28,10 @@ class ProjectService:
         inutilmente la complessità e sopratutto perchè sarà sempre e solo quel campo ho optato per la soluzione proposta."""
         projectToAdd = Project.from_model(project)
         insertionResult = self.collection.update_one({"_id" : ObjectId(userid)},{"$push":{"projects":projectToAdd}})
-        if not insertionResult.acknowledged:
+        if not insertionResult.acknowledged or insertionResult.modified_count < 0:
             raise ProjectAddError
-        print("Insertion completed", insertionResult.upserted_id)
-        return insertionResult.upserted_id
+        print("Insertion completed for user", userid)
+        return userid
 
     def delete(self,projectid,userid):
         """

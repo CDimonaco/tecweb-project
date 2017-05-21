@@ -5,6 +5,16 @@ class Project:
         self.description = description
         self.createdAt = createdAt
 
+    def __eq__(self, other):
+        """Override del metodo __eq__ necessario per il testing."""
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return False
+
+    def __ne__(self, other):
+        """ Definisce quando due oggetti non sono uguali. Necessario per il testing"""
+        return not self.__eq__(other)
+
 
     @staticmethod
     def to_model(mongoproject):
