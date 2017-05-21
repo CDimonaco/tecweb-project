@@ -29,8 +29,8 @@ class TestUserService(TestCase):
         deletefilter = UserFilter(id="")
         try:
             self.service.delete(deletefilter)
-        except UserNotFoundError:
-            self.fail(UserNotFoundError)
+        except UserNotFoundError as e:
+            self.fail(e)
         print("Delete test passed \n")
 
     def test_findFilter(self):
@@ -38,8 +38,8 @@ class TestUserService(TestCase):
         expecteduser = User(id="591ff8f647488822d7b707d4",username="carmine",password="ciao",role=1,email="carmine.dimonaco@gmail.com")
         try:
             userfound = self.service.find(filter=filter)
-        except UserNotFoundError:
-            self.fail(UserNotFoundError)
+        except UserNotFoundError as e:
+            self.fail(e)
         print(expecteduser)
         print(userfound[0])
         self.assertTrue(userfound[0].__eq__(expecteduser))
@@ -49,8 +49,8 @@ class TestUserService(TestCase):
         testuser = User(username="test",password="test",role=0,email="test@email.com")
         try:
             insertedid = self.service.add(testuser)
-        except UserAddError:
-            self.fail(UserAddError)
+        except UserAddError as e:
+            self.fail(e)
         print(insertedid)
 
 
@@ -65,8 +65,8 @@ class TestSensorService(TestCase):
         testsensor = Sensor(name="Testsensor",apikey="8598984908092083098093",project="591ff9458e2b82f3872c111b")
         try:
             insertedid = self.service.add(testsensor)
-        except SensorAddError:
-            self.fail(SensorAddError)
+        except SensorAddError as e:
+            self.fail(e)
         print(insertedid)
 
     def test_findsensor(self):
@@ -74,8 +74,8 @@ class TestSensorService(TestCase):
         expectedsensor = Sensor(id="5921ceef47488822d7b72931",name="Temperatura 04",project="591ff9458e2b82f3872c111b",apikey="870968098489084509854")
         try:
             sensorfound = self.service.find(filter=filter)
-        except SensorNotFoundError:
-            self.fail(SensorNotFoundError)
+        except SensorNotFoundError as e:
+            self.fail(e)
         print(expectedsensor)
         print(sensorfound[0])
 
@@ -85,15 +85,15 @@ class TestSensorService(TestCase):
         deletefilter = SensorFilter(id="5921b904ef43d217544829d1")
         try:
             self.service.delete(deletefilter)
-        except SensorNotFoundError:
-            self.fail(SensorNotFoundError)
+        except SensorNotFoundError as e:
+            self.fail(e)
 
     def test_addvalue(self):
         testvalue = Value(value=9898,timestamp=datetime.datetime.now(),additional="TEST")
         try:
             insertedid = self.service.setvalue(sensorid="5921e8f8ef43d21ea51a29e6",value=testvalue)
-        except ValueAddError:
-            self.fail(ValueAddError)
+        except ValueAddError as e:
+            self.fail(e)
 
         print(insertedid)
 
@@ -104,16 +104,16 @@ class TestSensorService(TestCase):
         filter = ValueFilter(id="5921cf1824dcb4b5f1caf42d",timestamp=timefilter) #TODO:ADD COMPARISON TO EXPECTED VALUE BUT TEST WORKS
         try:
             values = self.service.getvalues(filter=filter)
-        except ValueNotFoundError:
-            self.fail(ValueNotFoundError)
+        except ValueNotFoundError as e:
+            self.fail(e)
 
         print(values[0])
 
     def test_resetsensor(self):
         try:
             self.service.resetvalues(sensorid="5921e8f8ef43d21ea51a29e6")
-        except SensorNotFoundError:
-            self.fail(SensorNotFoundError)
+        except SensorNotFoundError as e:
+            self.fail(e)
 
 """
 
@@ -126,10 +126,22 @@ class TestProjectService(TestCase):
         projecttoadd = Project(name="Test",description="Test description",createdAt=datetime.datetime.now())
         try:
             insertedid = self.service.add(userid="591ff8f647488822d7b707d4",project=projecttoadd)
-        except ProjectAddError:
-            self.fail(ProjectAddError)
+        except ProjectAddError as e:
+            self.fail(e)
 
         print(insertedid)
 
     def test_findproject(self):
-        filter = ProjectFilter()
+        filter = ProjectFilter(id="591ff8f647488822d7b707d4")
+        try:
+            projects = self.service.find(filter=filter)
+        except ProjectNotFoundError:
+            self.fail(ProjectNotFoundError)
+
+    def test_deleteproject(self):
+        try:
+            self.service.delete(projectid="5921fad7ef43d22441866504",userid="591ff8f647488822d7b707d4")
+        except (ProjectNotFoundError,SensorNotFoundError) as e:
+            self.fail(e)
+
+

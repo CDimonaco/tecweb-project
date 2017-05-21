@@ -43,12 +43,13 @@ class ProjectService:
         :param projectid: Id del progetto da cancellare
         :return: True
         """
-        deleteprojectresult = self.collection.update_one({"_id": ObjectId(userid)}, {"$push": {"projects": {"_id" : ObjectId(projectid)}}})
-        if deleteprojectresult.deleted_count < 1:
+        #db.getCollection('user').update({"_id" : ObjectId("591ff8f647488822d7b707d4")},{"$pull" : {"projects" : {"id":ObjectId("5921fa05ef43d223e643139f")}}})
+        deleteprojectresult = self.collection.update_one({"_id": ObjectId(userid)}, {"$pull": {"projects": {"id" : ObjectId(projectid)}}})
+        if deleteprojectresult.modified_count < 1:
             #TODO:ADD LOG TO FLASK
             raise ProjectNotFoundError
         sensordeletefilter = SensorFilter(project=projectid)
-        deletesensorsresult = SensorService(self.collection.database()).delete(sensordeletefilter)
+        deletesensorsresult = SensorService(self.collection.database).delete(sensordeletefilter)
         if not deletesensorsresult:
             raise SensorNotFoundError
         return True
@@ -60,5 +61,5 @@ class ProjectService:
         :return: Una lista di progetti
         """
         projectsquery = self.collection.find(projection={"_id": False, "username": False, "password": False, "role": False,"email":False},filter=filter.getConditions())
-        projectlist = [Project.to_model(value["values"][0]) for value in projectsquery]
+        projectlist = [Project.to_model(value["projects"][0]) for value in projectsquery]
         return projectlist
