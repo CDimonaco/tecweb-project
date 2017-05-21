@@ -6,6 +6,11 @@ class User:
         self.role = role
         self.email = email
 
+
+    def getRole(self):
+        return self.role
+
+    
     def __str__(self):
         return "<User>: "+self.id+" "+self.username+" "+self.password+" "+self.role+" "+self.email
 

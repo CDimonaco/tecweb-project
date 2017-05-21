@@ -38,8 +38,8 @@ class UserService:
 
     def findOne(self,filter):
        #Questo metodo ritorna un solo utente dal database secondo i filtri inseriti
-       userQuery = self.collection.findOne(filter.getConditions())
-       if not userQuery.acknowledged:
+       userQuery = self.collection.find_one(filter.getConditions())
+       if not userQuery:
            #TODO:ADD LOG TO FLASK
            raise UserNotFoundError
        userFound = User.to_model(userQuery)

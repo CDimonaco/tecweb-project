@@ -1,8 +1,8 @@
 from unittest import TestCase
 from pymongo import MongoClient
-from .userservice import UserService
-from ..filters.users import UserFilter
-from ..exceptions.users import UserNotFoundError,UserAddError
+from common.services.userservice import UserService
+from common.filters.users import UserFilter
+from common.exceptions.users import UserNotFoundError,UserAddError
 
 class TestUserService(TestCase):
     def setUp(self):
@@ -17,7 +17,7 @@ class TestUserService(TestCase):
             self.fail(UserNotFoundError.__str__())
 
         self.assertEqual("carmine",userfound.username)
-
+        #TODO:DEFINE EQUALITY ON OBJECTS USER
 
 
 
