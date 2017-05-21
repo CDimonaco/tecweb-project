@@ -69,8 +69,8 @@ class TestSensorService(TestCase):
         print(insertedid)
 
     def test_findsensor(self):
-        filter = SensorFilter(id="5921b94def43d2175f441558")
-        expectedsensor = Sensor(id="5921b94def43d2175f441558",name="Testsensor",project="591ff9458e2b82f3872c111b",apikey="8598984908092083098093")
+        filter = SensorFilter(id="5921ceef47488822d7b72931")
+        expectedsensor = Sensor(id="5921ceef47488822d7b72931",name="Temperatura 04",project="591ff9458e2b82f3872c111b",apikey="870968098489084509854")
         try:
             sensorfound = self.service.find(filter=filter)
         except SensorNotFoundError:
@@ -90,7 +90,7 @@ class TestSensorService(TestCase):
     def test_addvalue(self):
         testvalue = Value(value=9898,timestamp=datetime.datetime.now(),additional="TEST")
         try:
-            insertedid = self.service.setvalue(sensorid="591ffa3547488822d7b70813",value=testvalue)
+            insertedid = self.service.setvalue(sensorid="5921ceef47488822d7b72931",value=testvalue)
         except ValueAddError:
             self.fail(ValueAddError)
 
@@ -98,7 +98,9 @@ class TestSensorService(TestCase):
 
     def test_getvalues(self):
         expectedvalue = Value(value=893.288,timestamp=dateutil.parser.parse("2016-04-01T10:30:36.438Z"),additional="",id="591ffa1d8e2b82f3872c111c")
-        filter = ValueFilter()
+        timefilter = TimeFilter(timeto=datetime.datetime.now())
+        print(timefilter.getConditions())
+        filter = ValueFilter(id="5921cf1824dcb4b5f1caf42d",timestamp=timefilter) #TODO:ADD COMPARISON TO EXPECTED VALUE BUT TEST WORKS
         try:
             values = self.service.getvalues(filter=filter)
         except ValueNotFoundError:

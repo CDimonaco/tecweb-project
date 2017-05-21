@@ -1,3 +1,5 @@
+
+
 class TimeFilter:
     def __init__(self,timefrom=None,timeto=None):
         self.timefrom = timefrom
@@ -7,8 +9,8 @@ class TimeFilter:
     def getConditions(self):
         filterDict = {}
         if self.timefrom is not None:
-            filterDict["$gt"] = self.timefrom.isoformat()
+            filterDict["$gte"] = self.timefrom
         if self.timeto is not None:
-            filterDict["$lt"] = self.timeto.isoformat()
+            filterDict["$lte"] = self.timeto
 
         return filterDict

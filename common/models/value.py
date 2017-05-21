@@ -19,7 +19,7 @@ class Value:
 
 
     def __str__(self):
-        return "<Value>: "+self.id+" "+str(self.value)+" "+self.additional + " " + self.timestamp
+        return "<Value>: "+self.id+" "+str(self.value)+" "+self.additional + " " + str(self.timestamp)
 
     @staticmethod
     def to_model(mongovalue):
