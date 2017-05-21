@@ -17,11 +17,10 @@ class Project:
         """ Definisce quando due oggetti non sono uguali. Necessario per il testing"""
         return not self.__eq__(other)
 
-
+    def
     @staticmethod
     def to_model(mongoproject):
-        return Project(id=str(mongoproject["_id"]),name=mongoproject["name"],description=mongoproject["description"],createdAt=dateutil.parser.parse(mongoproject["createdAt"]))
-    #TODO:Add date object for createdAt, convert from ISOString to datetime.date, also in from_model static method
+        return Project(id=str(mongoproject["_id"]),name=mongoproject["name"],description=mongoproject["description"],createdAt=mongoproject["createdAt"])
 
     @staticmethod
     def from_model(appproject):

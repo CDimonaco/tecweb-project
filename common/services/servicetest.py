@@ -90,7 +90,7 @@ class TestSensorService(TestCase):
     def test_addvalue(self):
         testvalue = Value(value=9898,timestamp=datetime.datetime.now(),additional="TEST")
         try:
-            insertedid = self.service.setvalue(sensorid="5921ceef47488822d7b72931",value=testvalue)
+            insertedid = self.service.setvalue(sensorid="5921e8f8ef43d21ea51a29e6",value=testvalue)
         except ValueAddError:
             self.fail(ValueAddError)
 
@@ -108,3 +108,8 @@ class TestSensorService(TestCase):
 
         print(values[0])
 
+    def test_resetsensor(self):
+        try:
+            self.service.resetvalues(sensorid="5921e8f8ef43d21ea51a29e6")
+        except SensorNotFoundError:
+            self.fail(SensorNotFoundError)

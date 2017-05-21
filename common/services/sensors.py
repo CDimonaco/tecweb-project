@@ -74,4 +74,14 @@ class SensorService:
         valuesquery = self.collection.find(projection={"_id":False,"name":False,"apikey":False,"project":False},filter=filter.getConditions())
         valueslist = [Value.to_model(value["values"][0]) for value in valuesquery]
         return valueslist
-    #TODO:ADD RESET SENSOR delete all values
+
+    def resetvalues(self,sensorid):
+        """
+        Resetta un sensore, ovvero elimina tutte le rilevazioni.
+        :param sensorid: Id del sensore da resettare
+        :return: True
+        """
+        insertionResult = self.collection.update_one(filter={"_id" : ObjectId(sensorid)},update={"$unset" : {"values" : ""}})
+        if not insertionResult.acknowledged or insertionResult.modified_count < 0:
+            raise SensorNotFoundError
+        print("RESET ON",sensorid)
