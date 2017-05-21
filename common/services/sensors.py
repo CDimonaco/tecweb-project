@@ -62,3 +62,13 @@ class SensorService:
             raise ValueAddError
         print("Insertion completed", insertionResult.upserted_id)
         return insertionResult.upserted_id
+
+    def getvalues(self,filter):
+        """
+        Trova dei valori rilevati secondo il filtro inserito.
+        :param filter: ValueFilter
+        :return: Lista di valori rilevati
+        """
+        valuesquery = self.collection.find(filter.getConditions())
+        valueslist = [Sensor.to_model(value) for value in valuesquery]
+        return valueslist
