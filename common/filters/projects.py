@@ -14,13 +14,14 @@ class ProjectFilter:
 
     def getConditions(self):
         filterDict =  {}
+        filterDict["projects"] = {"$exists": True}
         if self.id is not None:
             filterDict["_id"] = ObjectId(self.id)
         if self.projectid is not None:
-            filterDict["project._id"] = ObjectId(self.projectid)
+            filterDict["projects.id"] = ObjectId(self.projectid)
         if self.description is not None:
-            filterDict["project.description"] = self.description
+            filterDict["projects.description"] = self.description
         if self.createdAt is not None:
-            filterDict["project.createdAt"] = self.createdAt.getConditions()
+            filterDict["projects.createdAt"] = self.createdAt.getConditions()
 
         return filterDict

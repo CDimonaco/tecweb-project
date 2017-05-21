@@ -1,5 +1,4 @@
-import dateutil.parser
-
+from bson.objectid import ObjectId
 class Project:
     def __init__(self,name,description,createdAt,id=""):
         self.id = id
@@ -17,14 +16,17 @@ class Project:
         """ Definisce quando due oggetti non sono uguali. Necessario per il testing"""
         return not self.__eq__(other)
 
-    def
+    def __str__(self):
+        return "<Project>: " + self.name + " " + self.description + " " + str(self.createdAt)
+
     @staticmethod
     def to_model(mongoproject):
-        return Project(id=str(mongoproject["_id"]),name=mongoproject["name"],description=mongoproject["description"],createdAt=mongoproject["createdAt"])
+        return Project(id=str(mongoproject["id"]),name=mongoproject["name"],description=mongoproject["description"],createdAt=mongoproject["createdAt"])
 
     @staticmethod
     def from_model(appproject):
         mongoDict = {
+            "id" : ObjectId(),
             "name" : appproject.name,
             "description" : appproject.description,
             "createdAt" : appproject.createdAt

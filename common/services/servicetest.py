@@ -5,7 +5,7 @@ import dateutil.parser
 from common.models.user import User
 from common.models.value import Value
 from common.models.sensor import Sensor
-from common.models.value import Value
+from common.models.project import Project
 from common.services.userservice import UserService
 from common.services.sensors import SensorService
 from common.services.projects import ProjectService
@@ -19,18 +19,19 @@ from common.exceptions.sensors import SensorNotFoundError,SensorAddError
 from common.exceptions.values import ValueAddError,ValueNotFoundError
 from common.exceptions.project import ProjectNotFoundError,ProjectAddError
 
+"""
 class TestUserService(TestCase):
     def setUp(self):
         self.database = MongoClient().tecweb
         self.service = UserService(self.database)
 
-    """def test_delete(self):
+    def test_delete(self):
         deletefilter = UserFilter(id="")
         try:
             self.service.delete(deletefilter)
         except UserNotFoundError:
             self.fail(UserNotFoundError)
-        print("Delete test passed \n")"""
+        print("Delete test passed \n")
 
     def test_findFilter(self):
         filter = UserFilter(username="carmine") #Empty filter
@@ -80,12 +81,12 @@ class TestSensorService(TestCase):
 
         self.assertTrue(sensorfound[0].__eq__(expectedsensor))
 
-    """def test_deletesensor(self):
+    def test_deletesensor(self):
         deletefilter = SensorFilter(id="5921b904ef43d217544829d1")
         try:
             self.service.delete(deletefilter)
         except SensorNotFoundError:
-            self.fail(SensorNotFoundError)"""
+            self.fail(SensorNotFoundError)
 
     def test_addvalue(self):
         testvalue = Value(value=9898,timestamp=datetime.datetime.now(),additional="TEST")
@@ -113,3 +114,19 @@ class TestSensorService(TestCase):
             self.service.resetvalues(sensorid="5921e8f8ef43d21ea51a29e6")
         except SensorNotFoundError:
             self.fail(SensorNotFoundError)
+
+"""
+
+class TestProjectService(TestCase):
+    def setUp(self):
+        self.database = MongoClient().tecweb
+        self.service = ProjectService(self.database)
+
+    def test_addproject(self):
+        projecttoadd = Project(name="Test",description="Test description",createdAt=datetime.datetime.now())
+        try:
+            insertedid = self.service.add(userid="591ff8f647488822d7b707d4",project=projecttoadd)
+        except ProjectAddError:
+            self.fail(ProjectAddError)
+
+        print(insertedid)
