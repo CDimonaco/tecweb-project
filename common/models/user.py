@@ -35,6 +35,5 @@ class User:
             "password" : appuser.password,
             "role" : appuser.role,
             "email" : appuser.email,
-            "projects" : [],
         }
         return mongoDict

@@ -59,6 +59,6 @@ class ProjectService:
         :param filter: ProjectFilter
         :return: Una lista di progetti
         """
-        projectquery = self.collection.find(filter.getConditions())
-        projectlist = [Project.to_model(user) for user in projectquery]
+        projectsquery = self.collection.find(projection={"_id": False, "username": False, "password": False, "role": False,"email":False},filter=filter.getConditions())
+        projectlist = [Project.to_model(value["values"][0]) for value in projectsquery]
         return projectlist

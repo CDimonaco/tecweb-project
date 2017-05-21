@@ -130,3 +130,6 @@ class TestProjectService(TestCase):
             self.fail(ProjectAddError)
 
         print(insertedid)
+
+    def test_findproject(self):
+        filter = ProjectFilter()
