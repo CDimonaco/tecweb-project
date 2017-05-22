@@ -2,6 +2,9 @@ from common.settings import persistenceSettings,authSettings
 from untitled import flask_bcrypt
 from common.services.userservice import UserService
 from common.filters.users import UserFilter
+from common.filters.orfilter import OrFilter
+from common.models.user import User
+from common.exceptions.auth import RegisterSameUserError
 from flask.ext.jwt_extended import revoke_token
 
 class AuthManager:
@@ -46,6 +49,22 @@ class AuthManager:
         :param username: Username utente
         :param password: Password utente
         :param email: email utente
-        :return: id dell'utente registrato / False
+        :return: id dell'utente registrato / Eccezioni
         """
+
+        #Step 1, controllare che non ci siano altri utenti con lo stesso username o email
+        usernamefilter = UserFilter(username=username)
+        emailfilter = UserFilter(email=email)
+        #Filtro or per controllare in or le due condizioni dei filtri
+        orfilter = OrFilter(usernamefilter,emailfilter)
+        service = UserService(self.users)
+        result = service.find(orfilter)
+        if result:
+            raise RegisterSameUserError
+
+        #Creazione utente
+
+        newuser = User(username=username,email=email,password=flask_bcrypt.generate_password_hash(password=password))
+        newuserid = service.add(newuser)
+        return newuserid
 
