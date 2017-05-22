@@ -11,17 +11,16 @@ class ValueFilter:
 
     def getConditions(self):
         filterDict = {}
-        #Filtro necessario.
-        filterDict["values"] = {"$exists" : True}
+
         if self.sensorid is not None:
-            filterDict["_id"] = self.sensorid
+            filterDict["sensorid"] = self.sensorid
         if self.id is not None:
-            filterDict["values.id"] = ObjectId(self.id)
+            filterDict["_id"] = ObjectId(self.id)
         if self.value is not None:
-            filterDict["values.value"] = self.value
+            filterDict["value"] = self.value
         if self.timestamp is not None:
-            filterDict["values.timestamp"] = self.timestamp.getConditions()
+            filterDict["timestamp"] = self.timestamp.getConditions()
         if self.additional is not None:
-            filterDict["values.additional"] = self.additional
+            filterDict["additional"] = self.additional
 
         return filterDict

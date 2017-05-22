@@ -39,5 +39,7 @@ class UserService:
     def find(self,filter,offset=0):
        """Questo metodo ritorna utenti dal database secondo i filtri inseriti"""
        userQuery = self.collection.find(filter=filter.getConditions(),limit=100,skip=offset)
+       totalusers = userQuery.count()
        usersList = [User.to_model(user) for user in userQuery]
-       return usersList
+       more = offset >= totalusers
+       return usersList,not more

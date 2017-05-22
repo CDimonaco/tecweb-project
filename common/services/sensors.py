@@ -74,7 +74,7 @@ class SensorService:
         :param filter: ValueFilter
         :return: Lista di valori rilevati
         """
-        valuesquery = self.collection.find(projection={"_id":False,"name":False,"apikey":False,"project":False},filter=filter.getConditions())
+        valuesquery = self.collection.find(projection={"_id":False,"name":False,"apikey":False,"project":False},filter={})
         valueslist = [Value.to_model(value["values"][0]) for value in valuesquery]
         return valueslist
 
