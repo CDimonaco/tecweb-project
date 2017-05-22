@@ -61,7 +61,7 @@ class AuthManager:
         orfilter = OrFilter(usernamefilter,emailfilter)
         service = UserService(self.users)
         result = service.find(orfilter)
-        if result:
+        if result[0]:
             raise RegisterSameUserError
 
         #Creazione utente

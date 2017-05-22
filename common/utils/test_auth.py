@@ -9,9 +9,9 @@ class TestAuth(TestCase):
         self.manager = AuthManager(self.database)
 
 
-    """def test_registerValidUser(self):
-        newid = self.manager.register(username="Ciao",password="Miao",email="lol@asd.com",role=0)
-        print("New user with id",newid)"""
+    def test_registerValidUser(self):
+        newid = self.manager.register(username="ciccio",password="lllll",email="lol@sd.com",role=0)
+        print("New user with id",newid)
 
     def test_registerInvalidUser(self):
         try:
