@@ -22,7 +22,7 @@ class AuthManager:
         """
         service = UserService(self.users)
         loginfilter = UserFilter(username=username)
-        user = service.find(loginfilter)[0]
+        user = service.find(loginfilter)[0][0]
         #Check password
         if flask_bcrypt.check_password_hash(pw_hash=user.password,password=password):
             #Login effettuato

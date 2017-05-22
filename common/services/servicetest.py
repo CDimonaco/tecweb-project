@@ -159,7 +159,7 @@ class TestSensorService(TestCase):
             self.fail(e)
 
 """
-class TestValueService(TestCase):
+"""class TestValueService(TestCase):
 
     def setUp(self):
         self.database = MongoClient().tecweb
@@ -183,5 +183,5 @@ class TestValueService(TestCase):
 
     def test_deletevalue(self):
         filter = ValueFilter()
-        self.service.delete(filter)
+        self.service.delete(filter)"""
 

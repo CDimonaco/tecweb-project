@@ -9,6 +9,7 @@ from flask_restful import Api,abort
 from common.models.user import User
 from common.models.sensor import Sensor
 from resources.auth import AuthLogin,AuthLogout
+from resources.users import Test
 from flask_jwt_extended import JWTManager, jwt_required, \
     get_jwt_identity, revoke_token, unrevoke_token, \
     get_stored_tokens, get_all_stored_tokens, create_access_token, \
@@ -16,7 +17,7 @@ from flask_jwt_extended import JWTManager, jwt_required, \
     get_raw_jwt, get_stored_token
 
 import functools
-
+from flask_marshmallow import Marshmallow
 mongoClient = MongoClient()
 mongoDatabase = mongoClient["tecweb"]
 authManager = AuthManager(database=mongoDatabase)
@@ -38,55 +39,10 @@ rootLogger = logging.getLogger()
 
 jwt = JWTManager(app)
 
-"""
-# Standard login endpoint
-@app.route('/login', methods=['POST'])
-def login():
-    username = request.json.get('username', None)
-    password = request.json.get('password', None)
-    if not authManager.login(username=username,password=password):
-        return jsonify({"msg": "Bad username or password"}), 401
-    ret = {
-        'access_token': create_access_token(identity=username),
-    }
-    return jsonify(ret), 200
-
-# Helper method to revoke the current token used to access
-# a protected endpoint
-def _revoke_current_token():
-    current_token = get_raw_jwt()
-    jti = current_token['jti']
-    revoke_token(jti)
-
-# Endpoint for revoking the current users access token
-@app.route('/logout', methods=['POST'])
-@jwt_required
-def logout():
-    try:
-        authManager.logout(get_raw_jwt())
-    except KeyError:
-        return jsonify({
-            'msg': 'Access token not found in the blacklist store'
-        }), 500
-    return jsonify({"msg": "Successfully logged out"}), 200
-
-
-@app.route('/')
-def hello_world():
-    app.logger.debug("HERE")
-    app.logger.info("INFO")
-    return 'Hello World!'
-
-@app.route('/protected', methods=['GET'])
-@jwt_required
-def protected():
-    return jsonify({'hello': 'world'})
-"""
 
 
 
-
-
+api.add_resource(Test,"/test")
 api.add_resource(AuthLogin,"/auth/login",resource_class_kwargs={ 'auth_manager': authManager })
 api.add_resource(AuthLogout,"/auth/logout",resource_class_kwargs={ 'auth_manager': authManager })
 if __name__ == '__main__':
