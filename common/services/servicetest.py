@@ -8,6 +8,7 @@ from common.models.sensor import Sensor
 from common.models.project import Project
 from common.services.userservice import UserService
 from common.services.sensors import SensorService
+from common.services.values import ValueService
 from common.services.projects import ProjectService
 from common.filters.users import UserFilter
 from common.filters.projects import ProjectFilter
@@ -81,7 +82,7 @@ class TestSensorService(TestCase):
 
         self.assertTrue(sensorfound[0].__eq__(expectedsensor))"""
 
-    def test_findsensorpagination(self):
+    """def test_findsensorpagination(self):
         filter = SensorFilter()
         hasmore = True
         offset = 0
@@ -89,7 +90,7 @@ class TestSensorService(TestCase):
         while hasmore:
             sensorfound,hasmore = self.service.find(filter=filter,offset=offset)
             offset = offset + limit
-            print(len(sensorfound),hasmore)
+            print(len(sensorfound),hasmore)"""
 
 
 
@@ -158,3 +159,29 @@ class TestSensorService(TestCase):
             self.fail(e)
 
 """
+class TestValueService(TestCase):
+
+    def setUp(self):
+        self.database = MongoClient().tecweb
+        self.service = ValueService(self.database)
+
+    def test_addvalue(self):
+        newvalue = Value(value=899,timestamp=datetime.datetime.now(),sensorid="5921e8f8ef43d21ea51a29e6")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+
+    def test_findvaluespagination(self):
+          filter = ValueFilter(sensorid="5921e8f8ef43d21ea51a29e6")
+          hasmore = True
+          offset = 0
+          limit = 100
+          while hasmore:
+              sensorfound,hasmore = self.service.find(filter=filter,offset=offset)
+              offset = offset + limit
+              print(len(sensorfound),hasmore)
+
+
+    def test_deletevalue(self):
+        filter = ValueFilter()
+        self.service.delete(filter)
+

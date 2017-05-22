@@ -3,7 +3,7 @@ from common.models.value import Value
 from common.exceptions.values import ValueNotFoundError,ValueAddError
 class ValueService:
     def __init__(self,database):
-        self.collection = database[persistenceSettings["valueCollections"]]
+        self.collection = database[persistenceSettings["valueCollection"]]
 
 
     def getall(self):
