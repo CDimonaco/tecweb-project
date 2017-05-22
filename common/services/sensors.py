@@ -40,15 +40,18 @@ class SensorService:
             raise SensorNotFoundError
         return True
 
-    def find(self,filter):
+    def find(self,filter,offset=0):
         """
         Trova una lista di sensori secondo i filtri inseriti.
         :param filter: SensorFilter
-        :return: Una lista di sensori
+        :param offset: Offset per la paginazione
+        :return: Una lista di sensori, more che indica che ci sono ancora elementi da paginare
         """
-        sensorquery = self.collection.find(filter.getConditions())
+        sensorquery = self.collection.find(filter.getConditions(),skip=offset,limit=10)
+        totalsensors = sensorquery.count()
         sensorslist = [Sensor.to_model(user) for user in sensorquery]
-        return sensorslist
+        more = offset >= totalsensors
+        return sensorslist,not more
 
     def setvalue(self,sensorid,value):
         """

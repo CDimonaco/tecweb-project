@@ -36,8 +36,8 @@ class UserService:
             raise UserNotFoundError
         return True
 
-    def find(self,filter):
+    def find(self,filter,offset=0):
        """Questo metodo ritorna utenti dal database secondo i filtri inseriti"""
-       userQuery = self.collection.find(filter.getConditions())
+       userQuery = self.collection.find(filter=filter.getConditions(),limit=100,skip=offset)
        usersList = [User.to_model(user) for user in userQuery]
        return usersList

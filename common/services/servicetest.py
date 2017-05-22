@@ -53,7 +53,7 @@ class TestUserService(TestCase):
             self.fail(e)
         print(insertedid)
 
-
+"""
 
 
 class TestSensorService(TestCase):
@@ -61,15 +61,15 @@ class TestSensorService(TestCase):
         self.database = MongoClient().tecweb
         self.service = SensorService(self.database)
 
-    def test_addsensor(self):
+    """def test_addsensor(self):
         testsensor = Sensor(name="Testsensor",apikey="8598984908092083098093",project="591ff9458e2b82f3872c111b")
         try:
             insertedid = self.service.add(testsensor)
         except SensorAddError as e:
             self.fail(e)
-        print(insertedid)
+        print(insertedid)"""
 
-    def test_findsensor(self):
+    """def test_findsensor(self):
         filter = SensorFilter(id="5921ceef47488822d7b72931")
         expectedsensor = Sensor(id="5921ceef47488822d7b72931",name="Temperatura 04",project="591ff9458e2b82f3872c111b",apikey="870968098489084509854")
         try:
@@ -79,8 +79,21 @@ class TestSensorService(TestCase):
         print(expectedsensor)
         print(sensorfound[0])
 
-        self.assertTrue(sensorfound[0].__eq__(expectedsensor))
+        self.assertTrue(sensorfound[0].__eq__(expectedsensor))"""
 
+    def test_findsensorpagination(self):
+        filter = SensorFilter()
+        hasmore = True
+        offset = 0
+        limit = 10
+        while hasmore:
+            sensorfound,hasmore = self.service.find(filter=filter,offset=offset)
+            offset = offset + limit
+            print(len(sensorfound),hasmore)
+
+
+
+    """
     def test_deletesensor(self):
         deletefilter = SensorFilter(id="5921b904ef43d217544829d1")
         try:
@@ -117,7 +130,7 @@ class TestSensorService(TestCase):
 
 """
 
-class TestProjectService(TestCase):
+"""class TestProjectService(TestCase):
     def setUp(self):
         self.database = MongoClient().tecweb
         self.service = ProjectService(self.database)
@@ -144,4 +157,4 @@ class TestProjectService(TestCase):
         except (ProjectNotFoundError,SensorNotFoundError) as e:
             self.fail(e)
 
-
+"""
