@@ -3,7 +3,8 @@ import logging
 import datetime
 from pymongo import MongoClient
 import simplekv.db.mongo
-from flask.ext.bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt
+from common.utils.auth import AuthManager
 from common.models.user import User
 from common.models.sensor import Sensor
 from flask_jwt_extended import JWTManager, jwt_required, \
@@ -15,7 +16,7 @@ from flask_jwt_extended import JWTManager, jwt_required, \
 
 mongoClient = MongoClient()
 mongoDatabase = mongoClient["tecweb"]
-
+authManager = AuthManager(database=mongoDatabase)
 app = Flask(__name__)
 app.secret_key = "sosecretlol"
 app.config['JWT_BLACKLIST_ENABLED'] = True
@@ -26,7 +27,7 @@ app.config['JWT_BLACKLIST_STORE'] = simplekv.db.mongo.MongoStore(db=mongoDatabas
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = 'all'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(minutes=5)
 #Create mongodb client and connect to the database "tecweb"
-flask_bcrypt = Bcrypt(app)
+f_bcrypt = Bcrypt(app)
 #Log setup
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 rootLogger = logging.getLogger()
@@ -39,9 +40,8 @@ jwt = JWTManager(app)
 def login():
     username = request.json.get('username', None)
     password = request.json.get('password', None)
-    if username != 'test' or password != 'test':
+    if not authManager.login(username=username,password=password):
         return jsonify({"msg": "Bad username or password"}), 401
-
     ret = {
         'access_token': create_access_token(identity=username),
     }
@@ -59,7 +59,7 @@ def _revoke_current_token():
 @jwt_required
 def logout():
     try:
-        _revoke_current_token()
+        authManager.logout(get_raw_jwt())
     except KeyError:
         return jsonify({
             'msg': 'Access token not found in the blacklist store'

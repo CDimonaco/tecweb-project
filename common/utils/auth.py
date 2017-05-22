@@ -1,11 +1,11 @@
 from common.settings import persistenceSettings,authSettings
-from untitled import flask_bcrypt
+import flask_bcrypt
 from common.services.userservice import UserService
 from common.filters.users import UserFilter
 from common.filters.orfilter import OrFilter
 from common.models.user import User
 from common.exceptions.auth import RegisterSameUserError
-from flask.ext.jwt_extended import revoke_token
+from flask_jwt_extended import revoke_token
 
 class AuthManager:
     def __init__(self,database):
@@ -43,7 +43,7 @@ class AuthManager:
         return True
 
 
-    def register(self,username,password,email):
+    def register(self,username,password,email,role):
         """
         Metodo per registrare un nuovo utente.
         :param username: Username utente
@@ -64,7 +64,7 @@ class AuthManager:
 
         #Creazione utente
 
-        newuser = User(username=username,email=email,password=flask_bcrypt.generate_password_hash(password=password))
+        newuser = User(username=username,email=email,password=flask_bcrypt.generate_password_hash(password=password),role=role)
         newuserid = service.add(newuser)
         return newuserid
 
