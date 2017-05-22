@@ -5,7 +5,7 @@ from pymongo import MongoClient
 import simplekv.db.mongo
 from flask_bcrypt import Bcrypt
 from common.utils.auth import AuthManager
-from flask_restful import Api
+from flask_restful import Api,abort
 from common.models.user import User
 from common.models.sensor import Sensor
 from resources.auth import AuthLogin,AuthLogout
@@ -15,6 +15,7 @@ from flask_jwt_extended import JWTManager, jwt_required, \
     create_refresh_token, jwt_refresh_token_required, \
     get_raw_jwt, get_stored_token
 
+import functools
 
 mongoClient = MongoClient()
 mongoDatabase = mongoClient["tecweb"]
@@ -81,6 +82,10 @@ def hello_world():
 def protected():
     return jsonify({'hello': 'world'})
 """
+
+
+
+
 
 api.add_resource(AuthLogin,"/auth/login",resource_class_kwargs={ 'auth_manager': authManager })
 api.add_resource(AuthLogout,"/auth/logout",resource_class_kwargs={ 'auth_manager': authManager })

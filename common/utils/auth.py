@@ -5,7 +5,9 @@ from common.filters.users import UserFilter
 from common.filters.orfilter import OrFilter
 from common.models.user import User
 from common.exceptions.auth import RegisterSameUserError
-from flask_jwt_extended import revoke_token
+from flask_jwt_extended import revoke_token,get_jwt_identity
+from flask_restful import abort
+import functools
 
 class AuthManager:
     def __init__(self,database):
@@ -69,14 +71,14 @@ class AuthManager:
         return newuserid
 
 
-    def is_admin(self,userid):
+    def is_admin(self,username):
         """
         Metodo per controllare se un utente abbia o meno i privilegi amministrativi
         :param userid: Id dell'utente
         :return: True/False
         """
         service = UserService(self.users)
-        adminfilter = UserFilter(role=1,id=userid)
+        adminfilter = UserFilter(role=1,username=username)
         if service.find(adminfilter):
             return True
         return False
