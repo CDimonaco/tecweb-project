@@ -53,38 +53,3 @@ class SensorService:
         more = offset >= totalsensors
         return sensorslist,not more
 
-    def setvalue(self,sensorid,value):
-        """
-        Questo metodo aggiunge un valore rilevato ad un sensore, l'ordine dei valori è per timestamp,
-        aggiungendo un nuovo valore all'array dobbiamo anche usare l'operatore $sort per mantenere l'ordine
-        :param sensorid: Id del sensore a cui aggiungere una rilevazione
-        :return: Id del sensore a cui è stata aggiunta una rilevazione
-        """
-        valuetoadd = Value.from_model(value)
-        insertionResult = self.collection.update_one({"_id": ObjectId(sensorid)}, {"$push": {"values": {"$each":[valuetoadd],"$sort":{"timestamp":-1}}}})
-        #insertionResult = self.collection.update_one({"_id": ObjectId(sensorid)}, {"$push": {"values":valuetoadd}})
-        if not insertionResult.acknowledged or insertionResult.modified_count < 0:
-            raise ValueAddError
-        print("Insertion completed to sensor", sensorid)
-        return sensorid
-
-    def getvalues(self,filter):
-        """
-        Trova dei valori rilevati secondo il filtro inserito.
-        :param filter: ValueFilter
-        :return: Lista di valori rilevati
-        """
-        valuesquery = self.collection.find(projection={"_id":False,"name":False,"apikey":False,"project":False},filter={})
-        valueslist = [Value.to_model(value["values"][0]) for value in valuesquery]
-        return valueslist
-
-    def resetvalues(self,sensorid):
-        """
-        Resetta un sensore, ovvero elimina tutte le rilevazioni.
-        :param sensorid: Id del sensore da resettare
-        :return: True
-        """
-        insertionResult = self.collection.update_one(filter={"_id" : ObjectId(sensorid)},update={"$unset" : {"values" : ""}})
-        if not insertionResult.acknowledged or insertionResult.modified_count < 0:
-            raise SensorNotFoundError
-        print("RESET ON",sensorid)
