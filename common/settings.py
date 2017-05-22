@@ -4,6 +4,7 @@ persistenceSettings = {
     "usersCollection" : "user",
     "sensorsCollection" : "sensor",
     "tokensCollection" : "tokens",
+    "valueCollection" : "values",
     "dbName" : "tecweb"
 }
 
