@@ -5,8 +5,10 @@ from pymongo import MongoClient
 import simplekv.db.mongo
 from flask_bcrypt import Bcrypt
 from common.utils.auth import AuthManager
+from flask_restful import Api
 from common.models.user import User
 from common.models.sensor import Sensor
+from resources.auth import AuthLogin,AuthLogout
 from flask_jwt_extended import JWTManager, jwt_required, \
     get_jwt_identity, revoke_token, unrevoke_token, \
     get_stored_tokens, get_all_stored_tokens, create_access_token, \
@@ -18,6 +20,7 @@ mongoClient = MongoClient()
 mongoDatabase = mongoClient["tecweb"]
 authManager = AuthManager(database=mongoDatabase)
 app = Flask(__name__)
+api = Api(app=app)
 app.secret_key = "sosecretlol"
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_STORE'] = simplekv.db.mongo.MongoStore(db=mongoDatabase,collection="tokens")
@@ -34,7 +37,7 @@ rootLogger = logging.getLogger()
 
 jwt = JWTManager(app)
 
-
+"""
 # Standard login endpoint
 @app.route('/login', methods=['POST'])
 def login():
@@ -77,8 +80,10 @@ def hello_world():
 @jwt_required
 def protected():
     return jsonify({'hello': 'world'})
+"""
 
-
+api.add_resource(AuthLogin,"/auth/login",resource_class_kwargs={ 'auth_manager': authManager })
+api.add_resource(AuthLogout,"/auth/logout",resource_class_kwargs={ 'auth_manager': authManager })
 if __name__ == '__main__':
     consoleHandler = logging.StreamHandler()
     consoleHandler.setFormatter(logFormatter)
