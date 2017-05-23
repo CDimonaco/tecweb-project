@@ -43,6 +43,7 @@ class GetandAddProjectsForUser(Resource):
         #Controllo che l'utente non abbia più di 25 progetti
         filter = ProjectFilter(id=user_id)
         n_progetti = len(service.find(filter=filter))
+        print("Progetti: ",n_progetti)
         if n_progetti >= 25:
             return {"message" : "Too projects"},400
         newproject = Project(name=args["name"],description=args["description"],createdAt=datetime.datetime.now())

@@ -61,7 +61,13 @@ class ProjectService:
         :return: Una lista di progetti
         """
         projectsquery = self.collection.find(projection={"_id": False, "username": False, "password": False, "role": False,"email":False},filter=filter.getConditions())
-        projectlist = [Project.to_model(value["projects"][0]) for value in projectsquery]
+        elements = [value for value in projectsquery]
+        projectlist = []
+        for result in elements:
+            for projects  in result["projects"]:
+                projectlist.append(Project.to_model(projects))
+        print(elements)
+        print(projectlist)
         return projectlist
 
 
