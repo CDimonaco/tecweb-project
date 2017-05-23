@@ -13,7 +13,7 @@ class ValueFilter:
         filterDict = {}
 
         if self.sensorid is not None:
-            filterDict["sensorid"] = self.sensorid
+            filterDict["sensorid"] = ObjectId(self.sensorid)
         if self.id is not None:
             filterDict["_id"] = ObjectId(self.id)
         if self.value is not None:

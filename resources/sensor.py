@@ -4,7 +4,8 @@ from common.filters.sensors import SensorFilter
 from common.services.sensors import SensorService
 from common.services.values import ValueService
 from common.exceptions.values import ValueNotFoundError,ValueAddError
-from common.models.value import Value
+from common.models.value import Value,ValueModelView
+from common.filters.values import ValueFilter
 from resources.schemas.sensor import AddSensorRequest,AddValueRequest
 from flask_jwt_extended import jwt_required,get_jwt_identity
 from flask import request
@@ -92,12 +93,14 @@ class DeleteSensor(Resource):
         return 400
 
 
-class AddValue(Resource):
+class AddValueGetValue(Resource):
 
     def __init__(self, **kwargs):
         self.database = kwargs["database"]
+        self.authManager = kwargs["auth_manager"]
 
-    def post(self,api_key):
+    def post(self,sensor):
+        api_key = sensor
     #L'api key è un UUID4, dobbiamo validare ciò che ci viene in entrata.
         try:
             uuid.UUID(api_key)
@@ -123,6 +126,39 @@ class AddValue(Resource):
         except ValueAddError:
             return {"message" : "impossibile to add value"},500
         return {"message" : "Value added for sensor {}".format(str(sensor_id))}
+
+    @jwt_required
+    def get(self,sensor):
+        #Recupero il progetto associato al sensore di cui voglio i valori
+        user_id = get_jwt_identity()
+        if not ObjectId.is_valid(user_id):
+            return {"message": "Invalid user id"}, 500
+        if not ObjectId.is_valid(sensor):
+            return {"message": "Invalid sensor id"}, 500
+        if request.args.get("offset") is None:
+            return {"message" : "Offset can't be unset"},500
+        offset = int(request.args.get("offset"))
+        filter = SensorFilter(id=sensor)
+        project,_ = SensorService(self.database).find(filter=filter)
+        if not project:
+            return {"message" : "Invalid sensor id,no project associated to the sensor"},404
+        project_id = project[0].project
+        #Se è un admin
+        if self.authManager.is_admin(user_id=user_id):
+            valuesfilter = ValueFilter(sensorid=sensor)
+            valuesRaw, more = ValueService(self.database).find(filter=valuesfilter,offset=offset)
+            values = ValueModelView().dump(valuesRaw, many=True)
+            return {"values": values[0], "hasMore": more}, 200
+        if not self.authManager.project_owner(user_id,project_id):
+            return {"message" : "You are not the owner of project"},401
+        #Se sono il titolare del progetto, e quindi del sensore, posso passare a ricevere i valori.
+        valuesfilter = ValueFilter(sensorid=sensor)
+        valuesRaw,more = ValueService(self.database).find(filter=valuesfilter,offset=offset)
+        values = ValueModelView().dump(valuesRaw,many=True)
+        return {"values" : values[0],"hasMore" : more},200
+
+
+
 
 
 
