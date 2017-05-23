@@ -39,5 +39,5 @@ class ValueService:
        valuesQuery = self.collection.find(filter=filter.getConditions(),limit=100,skip=offset)
        totalvalues = valuesQuery.count()
        usersList = [Value.to_model(value) for value in valuesQuery]
-       more = offset <= totalvalues
+       more = offset + 10 < totalvalues
        return usersList,more
