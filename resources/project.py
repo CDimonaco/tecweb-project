@@ -40,9 +40,14 @@ class GetandAddProjectsForUser(Resource):
             return {"message": "Invalid user id"}, 500
         args = request.json
         service = ProjectService(self.database)
+        #Controllo che l'utente non abbia più di 25 progetti
+        filter = ProjectFilter(id=user_id)
+        n_progetti = len(service.find(filter=filter))
+        if n_progetti >= 25:
+            return {"message" : "Too projects"},400
         newproject = Project(name=args["name"],description=args["description"],createdAt=datetime.datetime.now())
         try:
-            result = service.add(project=newproject,userid=user_id)
+             service.add(project=newproject,userid=user_id)
         except ProjectAddError as e:
             return {"message" : str(e)},500
         except SensorNotFoundError as e:
