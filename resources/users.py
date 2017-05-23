@@ -6,12 +6,12 @@ from common.exceptions.users import UserNotFoundError
 from common.services.userservice import UserService
 from common.filters.users import UserFilter
 from resources.schemas.user import AddUserRequest
-import time
+from bson.objectid import ObjectId
 from common.models.user import UserViewModel
 
 class AddandGet(Resource):
-    #decorators = [jwt_required]
-    #method_decorators = [is_admindecorator]
+    decorators = [jwt_required]
+    method_decorators = [is_admindecorator]
 
     def __init__(self, **kwargs):
         self.authManager = kwargs["auth_manager"]
@@ -40,16 +40,7 @@ class AddandGet(Resource):
 
 
 
-    """def delete(self):
-        args = _delete_user_parser.parse_args()
-        service = UserService(self.database)
-        filter = UserFilter(id=args.userid)
-        try:
-            service.delete(filter)
-        except UserNotFoundError:
-            return {"message": "user not found"}, 404
 
-        return 400"""
 
 
 
@@ -62,7 +53,7 @@ class Test(Resource):
 
 
 
-class GetUsers(Resource):
+class DeleteUser(Resource):
 
     decorators = [jwt_required]
     method_decorators = [is_admindecorator]
@@ -70,3 +61,14 @@ class GetUsers(Resource):
     def __init__(self, **kwargs):
         self.database = kwargs["database"]
 
+    def delete(self,user_id):
+            print(user_id)
+            if not ObjectId.is_valid(user_id):
+                return {"message" : "Invalid user id"},500
+            service = UserService(self.database)
+            filter = UserFilter(id=user_id)
+            try:
+                service.delete(filter)
+            except UserNotFoundError:
+                return {"message": "user not found"}, 404
+            return 400
