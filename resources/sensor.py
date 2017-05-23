@@ -2,12 +2,16 @@ from common.exceptions.sensors import SensorNotFoundError,SensorAddError
 from common.models.sensor import Sensor,SensorViewModel
 from common.filters.sensors import SensorFilter
 from common.services.sensors import SensorService
-from resources.schemas.sensor import AddSensorRequest
+from common.services.values import ValueService
+from common.exceptions.values import ValueNotFoundError,ValueAddError
+from common.models.value import Value
+from resources.schemas.sensor import AddSensorRequest,AddValueRequest
 from flask_jwt_extended import jwt_required,get_jwt_identity
 from flask import request
 from flask_restful import Resource
 from bson.objectid import ObjectId
 import uuid
+import datetime
 
 class AddandGetSensors(Resource):
     decorators = [jwt_required]
@@ -86,3 +90,45 @@ class DeleteSensor(Resource):
         except SensorNotFoundError as e:
             return {"message" : str(e)},500
         return 400
+
+
+class AddValue(Resource):
+
+    def __init__(self, **kwargs):
+        self.database = kwargs["database"]
+
+    def post(self,api_key):
+    #L'api key è un UUID4, dobbiamo validare ciò che ci viene in entrata.
+        try:
+            uuid.UUID(api_key)
+        except ValueError:
+            return {"message" : "Invalid Api key"},500
+        validate = AddValueRequest().validate(request.json)
+        if validate:
+            return validate,500
+        args = request.json
+        if "additional" not in args:
+            additional = ""
+        else:
+            additional = args["additional"]
+        #Trovo il sensore per quell'api key
+        filter = SensorFilter(apikey=api_key)
+        result,_ = SensorService(self.database).find(filter=filter)
+        if not result:
+            return {"message" : "Impossible to assign the value"},404
+        sensor_id = result[0].id
+        new_value = Value(value=args["value"],timestamp=datetime.datetime.now(),sensorid=sensor_id,additional=additional)
+        try:
+            inserted_id = ValueService(self.database).add(new_value)
+        except ValueAddError:
+            return {"message" : "impossibile to add value"},500
+        return {"message" : "Value added for sensor {}".format(str(sensor_id))}
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,6 @@
 import dateutil.parser
 from bson.objectid import ObjectId
+from marshmallow import Schema,fields
 class Value:
     def __init__(self,value,timestamp,sensorid,additional="",id=""):
         self.id = id
@@ -36,3 +37,10 @@ class Value:
             "sensorid" : ObjectId(appvalue.sensorid)
         }
         return mongoDict
+
+class ValueModelView(Schema):
+    id = fields.String(required=True)
+    additional = fields.String(required=True)
+    value = fields.Float(required=True)
+    timestamp = fields.DateTime(required=True)
+    sensorid = fields.String(required=True)
