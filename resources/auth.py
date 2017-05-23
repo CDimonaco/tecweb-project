@@ -17,7 +17,7 @@ class AuthLogin(Resource):
         print(username,password)
         result,role = self.authManager.login(username,password)
         if result:
-            token = create_access_token(identity=username)
+            token = create_access_token(identity=result)
             return {"accessToken" : token, "role" : role},200
         return {"message" : "INVALID CREDENTIALS"},401
 

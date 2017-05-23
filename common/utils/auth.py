@@ -22,12 +22,14 @@ class AuthManager:
         """
         service = UserService(self.users)
         loginfilter = UserFilter(username=username)
-        user = service.find(loginfilter)[0][0]
+        user,more = service.find(loginfilter)
+        if not user:
+            return False,False
         #Check password
-        if flask_bcrypt.check_password_hash(pw_hash=user.password,password=password):
+        if flask_bcrypt.check_password_hash(pw_hash=user[0].password,password=password):
             #Login effettuato
-            return user.id,user.role
-        return False
+            return user[0].id,user[0].role
+        return False,False
 
 
     def logout(self,token):

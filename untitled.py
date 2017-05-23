@@ -5,6 +5,7 @@ from pymongo import MongoClient
 import simplekv.db.mongo
 from flask_bcrypt import Bcrypt
 from common.utils.auth import AuthManager
+from resources.project import GetProjectsForUser
 from flask_restful import Api,abort
 from common.models.user import User
 from common.models.sensor import Sensor
@@ -47,8 +48,12 @@ api.add_resource(Test,"/test")
 api.add_resource(AddandGet,"/user",resource_class_kwargs={ 'auth_manager': authManager ,"database" : mongoDatabase})
 api.add_resource(DeleteUser,"/user/<user_id>",resource_class_kwargs={"database" : mongoDatabase})
 
+api.add_resource(GetProjectsForUser,"/projects",resource_class_kwargs={"database" : mongoDatabase})
+
 api.add_resource(AuthLogin,"/auth/login",resource_class_kwargs={ 'auth_manager': authManager })
 api.add_resource(AuthLogout,"/auth/logout",resource_class_kwargs={ 'auth_manager': authManager })
+
+
 if __name__ == '__main__':
     consoleHandler = logging.StreamHandler()
     consoleHandler.setFormatter(logFormatter)

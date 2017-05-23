@@ -10,8 +10,8 @@ from bson.objectid import ObjectId
 from common.models.user import UserViewModel
 
 class AddandGet(Resource):
-    decorators = [jwt_required]
-    method_decorators = [is_admindecorator]
+    #decorators = [jwt_required]
+    #method_decorators = [is_admindecorator]
 
     def __init__(self, **kwargs):
         self.authManager = kwargs["auth_manager"]
