@@ -1,4 +1,3 @@
-from common.exceptions.project import ProjectNotFoundError,ProjectAddError
 from common.services.projects import ProjectService
 from common.filters.projects import ProjectFilter
 from bson.objectid import ObjectId
@@ -46,6 +45,8 @@ class GetandAddProjectsForUser(Resource):
             result = service.add(project=newproject,userid=user_id)
         except ProjectAddError as e:
             return {"message" : str(e)},500
+        except SensorNotFoundError as e:
+            pass
         return {"message" : "Project added for user {0}".format(user_id)}
 
 

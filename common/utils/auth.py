@@ -8,6 +8,8 @@ from common.exceptions.auth import RegisterSameUserError
 from flask_jwt_extended import revoke_token,get_jwt_identity
 from flask_restful import abort
 import functools
+from common.filters.projects import ProjectFilter
+from common.services.projects import ProjectService
 
 class AuthManager:
     def __init__(self,database):
@@ -82,6 +84,22 @@ class AuthManager:
         service = UserService(self.users)
         adminfilter = UserFilter(role=1,id=user_id)
         result,more = service.find(adminfilter)
+        if result:
+            return True
+        return False
+
+
+    def project_owner(self,userid,projectid):
+        """
+        Questo metodo verifica che il progetto appartenga all'utente.
+        
+        :param userid - Id dell'utente
+        :param projectid - Id del progetto
+        :return: True/False
+        """
+        filter = ProjectFilter(id=userid,projectid=projectid)
+        service = ProjectService(self.users)
+        result = service.find(filter=filter)
         if result:
             return True
         return False

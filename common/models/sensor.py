@@ -1,3 +1,5 @@
+from marshmallow import Schema,fields
+
 class Sensor:
     def __init__(self,name,apikey,project,id=""):
         self.id = id
@@ -30,3 +32,10 @@ class Sensor:
             "project" : appsensor.project,
         }
         return sensorDict
+
+
+class SensorViewModel(Schema):
+    name = fields.String(required=True)
+    apikey = fields.String(required=True)
+    project = fields.String(required=True)
+
