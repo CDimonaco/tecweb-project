@@ -73,15 +73,16 @@ class AuthManager:
         return newuserid
 
 
-    def is_admin(self,username):
+    def is_admin(self,user_id):
         """
         Metodo per controllare se un utente abbia o meno i privilegi amministrativi
         :param userid: Id dell'utente
         :return: True/False
         """
         service = UserService(self.users)
-        adminfilter = UserFilter(role=1,username=username)
-        if service.find(adminfilter):
+        adminfilter = UserFilter(role=1,id=user_id)
+        result,more = service.find(adminfilter)
+        if result:
             return True
         return False
 
