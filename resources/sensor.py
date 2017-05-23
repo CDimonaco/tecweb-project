@@ -61,3 +61,28 @@ class AddandGetSensors(Resource):
 
 
 
+class DeleteSensor(Resource):
+
+    decorators = [jwt_required]
+
+    def __init__(self, **kwargs):
+        self.authManager = kwargs["auth_manager"]
+        self.database = kwargs["database"]
+
+    def delete(self,project_id,sensor_id):
+        user_id = get_jwt_identity()
+        if not ObjectId.is_valid(user_id):
+            return {"message": "Invalid user id"}, 500
+        if not ObjectId.is_valid(sensor_id):
+            return {"message": "Invalid sensor id"}, 500
+        if not ObjectId.is_valid(project_id):
+            return {"message": "Invalid project id id"}, 500
+        if not self.authManager.project_owner(userid=user_id,projectid=project_id):
+            return {"message" : "You are not the owner of project"},401
+        service = SensorService(self.database)
+        filter = SensorFilter(project=project_id,id=sensor_id)
+        try:
+            service.delete(filter=filter)
+        except SensorNotFoundError as e:
+            return {"message" : str(e)},500
+        return 400
