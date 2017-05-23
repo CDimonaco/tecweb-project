@@ -28,6 +28,10 @@ class AddandGet(Resource):
 
         return {"newuser" : str(newid)},200
 
+    def get(self):
+        pass
+
+
     """def delete(self):
         args = _delete_user_parser.parse_args()
         service = UserService(self.database)

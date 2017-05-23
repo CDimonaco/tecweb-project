@@ -1,3 +1,5 @@
+from marshmallow import Schema,fields
+
 class User:
     def __init__(self,username,password,email,role,id=""):
         self.id = id
@@ -37,3 +39,12 @@ class User:
             "email" : appuser.email,
         }
         return mongoDict
+
+
+class UserViewModel(Schema):
+    id = fields.String(required=True)
+    username = fields.String(required=True)
+    password = fields.String(required=True)
+    role = fields.Integer(required=True)
+    email = fields.Email(required=True)
+
