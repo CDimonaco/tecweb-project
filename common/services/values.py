@@ -1,6 +1,8 @@
 from common.settings import persistenceSettings
 from common.models.value import Value
 from common.exceptions.values import ValueNotFoundError,ValueAddError
+import pymongo
+
 class ValueService:
     def __init__(self,database):
         self.collection = database[persistenceSettings["valueCollection"]]
@@ -36,7 +38,7 @@ class ValueService:
 
     def find(self,filter,offset=0):
        """Questo metodo ritorna utenti dal database secondo i filtri inseriti"""
-       valuesQuery = self.collection.find(filter=filter.getConditions(),limit=100,skip=offset)
+       valuesQuery = self.collection.find(filter=filter.getConditions(),limit=100,skip=offset).sort({"timestamp" : pymongo.DESCENDING})
        totalvalues = valuesQuery.count()
        usersList = [Value.to_model(value) for value in valuesQuery]
        more = offset + 10 < totalvalues

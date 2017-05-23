@@ -17,7 +17,6 @@ from flask_jwt_extended import JWTManager, jwt_required, \
     get_stored_tokens, get_all_stored_tokens, create_access_token, \
     create_refresh_token, jwt_refresh_token_required, \
     get_raw_jwt, get_stored_token
-
 import functools
 from flask_marshmallow import Marshmallow
 mongoClient = MongoClient()
