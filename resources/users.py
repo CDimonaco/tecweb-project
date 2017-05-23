@@ -7,6 +7,7 @@ from common.services.userservice import UserService
 from common.filters.users import UserFilter
 from resources.schemas.user import AddUserRequest
 import time
+from common.models.user import UserViewModel
 
 class AddandGet(Resource):
     #decorators = [jwt_required]
@@ -29,7 +30,14 @@ class AddandGet(Resource):
         return {"newuser" : str(newid)},200
 
     def get(self):
-        pass
+        if request.args.get("offset") is None:
+            return {"message" : "Offset can't be unset"},500
+        offset = int(request.args.get("offset"))
+        userfilter = UserFilter()
+        usersRaw,more = UserService(self.database).find(filter=userfilter,offset=offset)
+        userlist = UserViewModel().dump(usersRaw,many=True)
+        return {"users" : userlist[0], "hasMore" : more}
+
 
 
     """def delete(self):
