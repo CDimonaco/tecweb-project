@@ -63,3 +63,6 @@ class ProjectService:
         projectsquery = self.collection.find(projection={"_id": False, "username": False, "password": False, "role": False,"email":False},filter=filter.getConditions())
         projectlist = [Project.to_model(value["projects"][0]) for value in projectsquery]
         return projectlist
+
+
+

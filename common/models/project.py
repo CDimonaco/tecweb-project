@@ -1,4 +1,6 @@
 from bson.objectid import ObjectId
+from marshmallow import Schema,fields
+
 class Project:
     def __init__(self,name,description,createdAt,id=""):
         self.id = id
@@ -32,3 +34,10 @@ class Project:
             "createdAt" : appproject.createdAt
         }
         return mongoDict
+
+
+class ProjectModelView(Schema):
+    id = fields.String(required=True)
+    name = fields.String(required=True)
+    description = fields.String(required=True)
+    createdAt = fields.DateTime(required=True)
