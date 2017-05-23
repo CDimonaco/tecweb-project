@@ -41,5 +41,6 @@ class UserService:
        userQuery = self.collection.find(filter=filter.getConditions(),limit=100,skip=offset)
        totalusers = userQuery.count()
        usersList = [User.to_model(user) for user in userQuery]
-       more = offset >= totalusers
-       return usersList,not more
+       print(totalusers)
+       more = offset + 100 < totalusers
+       return usersList, more

@@ -1,5 +1,5 @@
 from marshmallow import Schema,fields
-
+from bson.objectid import ObjectId
 class Sensor:
     def __init__(self,name,apikey,project,id=""):
         self.id = id
@@ -29,7 +29,7 @@ class Sensor:
         sensorDict = {
             "name" : appsensor.name,
             "apikey" : appsensor.apikey,
-            "project" : appsensor.project,
+            "project" : ObjectId(appsensor.project),
         }
         return sensorDict
 
@@ -37,5 +37,3 @@ class Sensor:
 class SensorViewModel(Schema):
     name = fields.String(required=True)
     apikey = fields.String(required=True)
-    project = fields.String(required=True)
-

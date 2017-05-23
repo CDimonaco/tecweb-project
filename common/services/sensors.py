@@ -26,7 +26,7 @@ class SensorService:
         if not insertionResult.acknowledged:
             raise SensorAddError
         print("Insertion completed", insertionResult.inserted_id)
-        return insertionResult.inserted_id
+        return str(insertionResult.inserted_id)
 
     def delete(self,filter):
         """
@@ -50,6 +50,6 @@ class SensorService:
         sensorquery = self.collection.find(filter.getConditions(),skip=offset,limit=10)
         totalsensors = sensorquery.count()
         sensorslist = [Sensor.to_model(user) for user in sensorquery]
-        more = offset >= totalsensors
-        return sensorslist,not more
+        more = offset + 10 < totalsensors
+        return sensorslist,more
 

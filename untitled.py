@@ -6,6 +6,7 @@ import simplekv.db.mongo
 from flask_bcrypt import Bcrypt
 from common.utils.auth import AuthManager
 from resources.project import GetandAddProjectsForUser,GetProjectsAdminAndDelete
+from resources.sensor import AddandGetSensors
 from flask_restful import Api,abort
 from common.models.user import User
 from common.models.sensor import Sensor
@@ -50,6 +51,8 @@ api.add_resource(DeleteUser,"/user/<user_id>",resource_class_kwargs={"database" 
 
 api.add_resource(GetandAddProjectsForUser,"/projects",resource_class_kwargs={"database" : mongoDatabase})
 api.add_resource(GetProjectsAdminAndDelete,"/projects/<id>",resource_class_kwargs={"database" : mongoDatabase})
+
+api.add_resource(AddandGetSensors,"/sensors/<project_id>",resource_class_kwargs={ 'auth_manager': authManager ,"database" : mongoDatabase})
 
 api.add_resource(AuthLogin,"/auth/login",resource_class_kwargs={ 'auth_manager': authManager })
 api.add_resource(AuthLogout,"/auth/logout",resource_class_kwargs={ 'auth_manager': authManager })
