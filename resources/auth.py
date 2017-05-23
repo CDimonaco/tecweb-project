@@ -15,9 +15,10 @@ class AuthLogin(Resource):
         username = request.json["username"]
         password = request.json["password"]
         print(username,password)
-        if self.authManager.login(username,password):
+        result,role = self.authManager.login(username,password)
+        if result:
             token = create_access_token(identity=username)
-            return {"accessToken" : token}
+            return {"accessToken" : token, "role" : role},200
         return {"message" : "INVALID CREDENTIALS"},401
 
 

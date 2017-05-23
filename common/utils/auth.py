@@ -26,7 +26,7 @@ class AuthManager:
         #Check password
         if flask_bcrypt.check_password_hash(pw_hash=user.password,password=password):
             #Login effettuato
-            return user.id
+            return user.id,user.role
         return False
 
 

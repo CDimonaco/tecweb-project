@@ -6,9 +6,9 @@ from common.exceptions.users import UserNotFoundError
 from common.services.userservice import UserService
 from common.filters.users import UserFilter
 from resources.schemas.user import AddUserRequest
+import time
 
-
-class AddandRemove(Resource):
+class AddandGet(Resource):
     #decorators = [jwt_required]
     #method_decorators = [is_admindecorator]
 
@@ -45,6 +45,7 @@ class Test(Resource):
 
     def post(self):
         print(request.json["username"])
+        print(request.args.get("offset"))
         return 200
 
 

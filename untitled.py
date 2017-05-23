@@ -9,7 +9,7 @@ from flask_restful import Api,abort
 from common.models.user import User
 from common.models.sensor import Sensor
 from resources.auth import AuthLogin,AuthLogout
-from resources.users import Test,AddandRemove
+from resources.users import Test,AddandGet
 from flask_jwt_extended import JWTManager, jwt_required, \
     get_jwt_identity, revoke_token, unrevoke_token, \
     get_stored_tokens, get_all_stored_tokens, create_access_token, \
@@ -43,7 +43,10 @@ jwt = JWTManager(app)
 
 
 api.add_resource(Test,"/test")
-api.add_resource(AddandRemove,"/user",resource_class_kwargs={ 'auth_manager': authManager ,"database" : mongoDatabase})
+
+api.add_resource(AddandGet,"/user",resource_class_kwargs={ 'auth_manager': authManager ,"database" : mongoDatabase})
+
+
 api.add_resource(AuthLogin,"/auth/login",resource_class_kwargs={ 'auth_manager': authManager })
 api.add_resource(AuthLogout,"/auth/logout",resource_class_kwargs={ 'auth_manager': authManager })
 if __name__ == '__main__':
@@ -51,4 +54,4 @@ if __name__ == '__main__':
     consoleHandler.setFormatter(logFormatter)
     app.logger.setLevel(logging.DEBUG)
     app.logger.addHandler(consoleHandler)
-    app.run()
+    app.run(threaded=True)
