@@ -1,24 +1,17 @@
-from flask import Flask,request,jsonify
+from flask import Flask
 import logging
 import datetime
 from pymongo import MongoClient
 import simplekv.db.mongo
-from flask_bcrypt import Bcrypt
 from common.utils.auth import AuthManager
 from resources.project import GetandAddProjectsForUser,GetProjectsAdminAndDelete
 from resources.sensor import AddandGetSensors,DeleteSensor,AddValueGetValue
 from flask_restful import Api,abort
-from common.models.user import User
-from common.models.sensor import Sensor
 from resources.auth import AuthLogin,AuthLogout
 from resources.users import Test,AddandGet,DeleteUser
-from flask_jwt_extended import JWTManager, jwt_required, \
-    get_jwt_identity, revoke_token, unrevoke_token, \
-    get_stored_tokens, get_all_stored_tokens, create_access_token, \
-    create_refresh_token, jwt_refresh_token_required, \
-    get_raw_jwt, get_stored_token
-import functools
-from flask_marshmallow import Marshmallow
+from flask_jwt_extended import JWTManager
+from flask_cors import CORS
+
 mongoClient = MongoClient()
 mongoDatabase = mongoClient["tecweb"]
 authManager = AuthManager(database=mongoDatabase)
@@ -27,19 +20,12 @@ api = Api(app=app)
 app.secret_key = "sosecretlol"
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_STORE'] = simplekv.db.mongo.MongoStore(db=mongoDatabase,collection="tokens")
-# Check all tokens (access and refresh) to see if they have been revoked.
-# You can alternately check only the refresh tokens here, by setting this
-# to 'refresh' instead of 'all'
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = 'all'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(minutes=5)
-#Create mongodb client and connect to the database "tecweb"
-f_bcrypt = Bcrypt(app)
-#Log setup
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 rootLogger = logging.getLogger()
-
 jwt = JWTManager(app)
-
+CORS(app)
 
 
 

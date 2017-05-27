@@ -62,7 +62,7 @@ class AddandGetSensors(Resource):
             inserted_id = SensorService(self.database).add(newsensor)
         except SensorAddError as e:
             return {"message" : str(e)},500
-        return {"newproject" : inserted_id,"apikey" : apikey},200
+        return {"newsensor" : inserted_id,"apikey" : apikey},200
 
 
 

@@ -35,5 +35,6 @@ class Sensor:
 
 
 class SensorViewModel(Schema):
+    id = fields.String(required=True)
     name = fields.String(required=True)
     apikey = fields.String(required=True)

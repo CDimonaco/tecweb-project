@@ -90,6 +90,8 @@ class GetProjectsAdminAndDelete(Resource):
             service.delete(projectid=id,userid=user_id)
         except ProjectNotFoundError as e:
             return {"message" : str(e)},500
+        except SensorNotFoundError as e:
+            pass
         return 400
 
 

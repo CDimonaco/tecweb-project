@@ -49,7 +49,7 @@ class SensorService:
         """
         sensorquery = self.collection.find(filter.getConditions(),skip=offset,limit=10)
         totalsensors = sensorquery.count()
-        sensorslist = [Sensor.to_model(user) for user in sensorquery]
+        sensorslist = [Sensor.to_model(sensor) for sensor in sensorquery]
         more = offset + 10 < totalsensors
         return sensorslist,more
 
