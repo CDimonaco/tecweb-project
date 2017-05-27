@@ -48,7 +48,7 @@ class ProjectService:
         if deleteprojectresult.modified_count < 1:
             #TODO:ADD LOG TO FLASK
             raise ProjectNotFoundError
-        sensordeletefilter = SensorFilter(project=projectid)
+        sensordeletefilter = SensorFilter(project=[projectid])
         deletesensorsresult = SensorService(self.collection.database).delete(sensordeletefilter)
         if not deletesensorsresult:
             raise SensorNotFoundError

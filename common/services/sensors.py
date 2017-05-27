@@ -47,9 +47,10 @@ class SensorService:
         :param offset: Offset per la paginazione
         :return: Una lista di sensori, more che indica che ci sono ancora elementi da paginare
         """
-        sensorquery = self.collection.find(filter.getConditions(),skip=offset,limit=10)
+        sensorquery = self.collection.find(filter.getConditions(),skip=offset,limit=100)
         totalsensors = sensorquery.count()
         sensorslist = [Sensor.to_model(sensor) for sensor in sensorquery]
-        more = offset + 10 < totalsensors
+        print(totalsensors)
+        more = offset + 100 < totalsensors
         return sensorslist,more
 

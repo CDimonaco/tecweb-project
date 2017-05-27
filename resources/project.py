@@ -34,6 +34,7 @@ class GetandAddProjectsForUser(Resource):
     def post(self):
         user_id = get_jwt_identity()
         validate = AddProjectRequest().validate(request.json)
+        print(validate)
         if validate:
             return validate, 500
         if not ObjectId.is_valid(user_id):

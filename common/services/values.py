@@ -37,9 +37,10 @@ class ValueService:
         return True
 
     def find(self,filter,offset=0):
-       """Questo metodo ritorna utenti dal database secondo i filtri inseriti"""
+       """Questo metodo ritorna valori dal database secondo i filtri inseriti"""
        valuesQuery = self.collection.find(filter=filter.getConditions(),limit=100,skip=offset).sort("timestamp", -1)
        totalvalues = valuesQuery.count()
+       print(totalvalues)
        usersList = [Value.to_model(value) for value in valuesQuery]
-       more = offset + 10 < totalvalues
+       more = offset + 100 < totalvalues
        return usersList,more
