@@ -32,14 +32,14 @@ class AddandGetSensors(Resource):
         offset = int(request.args.get("offset"))
         is_admin = self.authManager.is_admin(user_id=user_id)
         if is_admin:
-            filter = SensorFilter(project=project_id)
+            filter = SensorFilter(project=[project_id])
             filtersRaw,hasmore = SensorService(self.database).find(filter,offset=offset)
             filtersList = SensorViewModel().dump(filtersRaw,many=True)
             return {"sensors" : filtersList[0],"hasMore" : hasmore},200
         #Controllo se l'utente è il propietario del progetto
         if not self.authManager.project_owner(userid=user_id,projectid=project_id):
             return {"message" : "You are not the owner of project"},401
-        filter = SensorFilter(project=project_id)
+        filter = SensorFilter(project=[project_id])
         filtersRaw, hasmore = SensorService(self.database).find(filter, offset=offset)
         filtersList = SensorViewModel().dump(filtersRaw, many=True)
         return {"sensors": filtersList[0], "hasMore": hasmore}, 200
@@ -85,7 +85,7 @@ class DeleteSensor(Resource):
         if not self.authManager.project_owner(userid=user_id,projectid=project_id):
             return {"message" : "You are not the owner of project"},401
         service = SensorService(self.database)
-        filter = SensorFilter(project=project_id,id=sensor_id)
+        filter = SensorFilter(project=[project_id],id=[sensor_id])
         try:
             service.delete(filter=filter)
         except SensorNotFoundError as e:
@@ -138,7 +138,7 @@ class AddValueGetValue(Resource):
         if request.args.get("offset") is None:
             return {"message" : "Offset can't be unset"},500
         offset = int(request.args.get("offset"))
-        filter = SensorFilter(id=sensor)
+        filter = SensorFilter(id=[sensor])
         project,_ = SensorService(self.database).find(filter=filter)
         if not project:
             return {"message" : "Invalid sensor id,no project associated to the sensor"},404

@@ -18,7 +18,7 @@ class SensorFilter:
         if self.name is not None:
             filterDict["name"] = self.name
         if self.project is not None:
-            filterDict["project"] = ObjectId(self.project)
+            filterDict["project"] = {"$in" : [ObjectId(id) for id in self.project]}
         if self.apikey is not None:
             filterDict["apikey"] = self.apikey
 

@@ -2,6 +2,10 @@ from common.settings import persistenceSettings
 from common.exceptions.users import *
 from common.models.user import User
 from common.services.sensors import SensorService
+from common.services.projects import ProjectService
+from common.filters.projects import ProjectFilter
+from common.filters.sensors import SensorFilter
+
 class UserService:
     def __init__(self,database):
         self.collection = database[persistenceSettings["usersCollection"]]
@@ -29,12 +33,21 @@ class UserService:
 
     def delete(self,filter):
         """Questo metodo elimina utenti,eliminandone anche i sensori e i valori associati a quei sensori"""
+        conditions = filter.getConditions()
+        #Mi è più comodo ai fini della procedura inserire le condizioni dei filtri in una variabile.
+        # Recupero tutti i progetti dell'utente per cancellarne i sensori
+        ps = ProjectService(self.collection.database)
+        pf = ProjectFilter(id=str(conditions["_id"]))
+        projectList = ps.find(pf)
+        idprojects = [project.id for project in projectList]
+        print(idprojects)
+        sensorService = SensorService(self.collection.database)
+        sensorfilter = SensorFilter(project=idprojects)
+        sensordeleteResult = sensorService.delete(sensorfilter)
         deleteResult = self.collection.delete_many(filter.getConditions())
         if deleteResult.deleted_count < 1:
             #TODO:ADD LOG TO FLASK
             raise UserNotFoundError
-        sensorService = SensorService(self.collection.database())
-        sensordeleteResult =
         return True
 
     def find(self,filter,offset=0):
