@@ -1,8 +1,7 @@
 from common.settings import persistenceSettings
 from common.exceptions.users import *
 from common.models.user import User
-from bson.objectid import ObjectId
-
+from common.services.sensors import SensorService
 class UserService:
     def __init__(self,database):
         self.collection = database[persistenceSettings["usersCollection"]]
@@ -29,11 +28,13 @@ class UserService:
         return insertionResult.inserted_id
 
     def delete(self,filter):
-        """Questo metodo elimina utenti"""
+        """Questo metodo elimina utenti,eliminandone anche i sensori e i valori associati a quei sensori"""
         deleteResult = self.collection.delete_many(filter.getConditions())
         if deleteResult.deleted_count < 1:
             #TODO:ADD LOG TO FLASK
             raise UserNotFoundError
+        sensorService = SensorService(self.collection.database())
+        sensordeleteResult =
         return True
 
     def find(self,filter,offset=0):

@@ -54,6 +54,9 @@ class ProjectService:
             raise SensorNotFoundError
         return True
 
+
+    def delete_all(self,userid):
+
     def find(self,filter):
         """
         Questo metodo trova progetti secondo il filtro inserito.

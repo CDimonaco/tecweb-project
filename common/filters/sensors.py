@@ -14,7 +14,7 @@ class SensorFilter:
         filterDict = {}
 
         if self.id is not None:
-            filterDict["_id"] = ObjectId(self.id)
+            filterDict["_id"] = {"$in" : [ObjectId(id) for id in self.id]}
         if self.name is not None:
             filterDict["name"] = self.name
         if self.project is not None:
