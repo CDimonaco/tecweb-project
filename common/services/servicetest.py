@@ -159,18 +159,65 @@ class TestSensorService(TestCase):
             self.fail(e)
 
 """
-"""class TestValueService(TestCase):
+import datetime
+class TestValueService(TestCase):
 
     def setUp(self):
         self.database = MongoClient().tecweb
         self.service = ValueService(self.database)
 
     def test_addvalue(self):
-        newvalue = Value(value=899,timestamp=datetime.datetime.now(),sensorid="5921e8f8ef43d21ea51a29e6")
+        now = datetime.datetime.now()
+        onehour = now - datetime.timedelta(hours=1)
+        twohour = now - datetime.timedelta(hours=2)
+        threehour = now - datetime.timedelta(hours=3)
+        fourhour = now - datetime.timedelta(hours=4)
+        fivehour = now - datetime.timedelta(hours=5)
+        sixhour = now - datetime.timedelta(hours=6)
+        newvalue = Value(value=899,timestamp=now,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=678,timestamp=now,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=876,timestamp=onehour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=234,timestamp=onehour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=256,timestamp=twohour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=987,timestamp=twohour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=123,timestamp=threehour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=34,timestamp=threehour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=12,timestamp=fourhour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=34,timestamp=fourhour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=1,timestamp=fivehour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=23,timestamp=fivehour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=344,timestamp=sixhour,sensorid="592af67aef43d2029ea7b35a")
+        insertedid = self.service.add(newvalue)
+        print(insertedid)
+        newvalue = Value(value=12,timestamp=sixhour,sensorid="592af67aef43d2029ea7b35a")
         insertedid = self.service.add(newvalue)
         print(insertedid)
 
-    def test_findvaluespagination(self):
+    """def test_findvaluespagination(self):
           filter = ValueFilter(sensorid="5921e8f8ef43d21ea51a29e6")
           hasmore = True
           offset = 0

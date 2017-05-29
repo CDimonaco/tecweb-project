@@ -5,7 +5,7 @@ from common.services.sensors import SensorService
 from common.services.projects import ProjectService
 from common.filters.projects import ProjectFilter
 from common.filters.sensors import SensorFilter
-
+from common.exceptions.sensors import SensorNotFoundError
 class UserService:
     def __init__(self,database):
         self.collection = database[persistenceSettings["usersCollection"]]
@@ -43,7 +43,10 @@ class UserService:
         print(idprojects)
         sensorService = SensorService(self.collection.database)
         sensorfilter = SensorFilter(project=idprojects)
-        sensordeleteResult = sensorService.delete(sensorfilter)
+        try:
+            sensordeleteResult = sensorService.delete(sensorfilter)
+        except SensorNotFoundError:
+            pass
         deleteResult = self.collection.delete_many(filter.getConditions())
         if deleteResult.deleted_count < 1:
             #TODO:ADD LOG TO FLASK
