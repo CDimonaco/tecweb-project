@@ -16,7 +16,7 @@ mongoClient = MongoClient()
 mongoDatabase = mongoClient["tecweb"]
 authManager = AuthManager(database=mongoDatabase)
 app = Flask(__name__)
-api_bp = Blueprint("api",__name__)
+api_bp = Blueprint("api",__name__,url_prefix="/api")
 api = Api(api_bp)
 app.secret_key = "sosecretlol"
 app.config['JWT_BLACKLIST_ENABLED'] = True
@@ -43,7 +43,7 @@ api.add_resource(AddValueGetValue,"/sensors/value/<sensor>",resource_class_kwarg
 
 api.add_resource(AuthLogin,"/auth/login",resource_class_kwargs={ 'auth_manager': authManager })
 api.add_resource(AuthLogout,"/auth/logout",resource_class_kwargs={ 'auth_manager': authManager })
-
+app.register_blueprint(api_bp)
 
 if __name__ == '__main__':
     consoleHandler = logging.StreamHandler()
