@@ -50,4 +50,4 @@ if __name__ == '__main__':
     consoleHandler.setFormatter(logFormatter)
     app.logger.setLevel(logging.DEBUG)
     app.logger.addHandler(consoleHandler)
-    app.run(threaded=True)
+    app.run(threaded=True,host='0.0.0.0')
