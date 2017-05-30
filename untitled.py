@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,Blueprint
 import logging
 import datetime
 from pymongo import MongoClient
@@ -11,14 +11,13 @@ from resources.auth import AuthLogin,AuthLogout
 from resources.users import Test,AddandGet,DeleteUser
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-from werkzeug.contrib.fixers import ProxyFix
 
 mongoClient = MongoClient()
 mongoDatabase = mongoClient["tecweb"]
 authManager = AuthManager(database=mongoDatabase)
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app)
-api = Api(app=app)
+api_bp = Blueprint("api",__name__)
+api = Api(api_bp)
 app.secret_key = "sosecretlol"
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_STORE'] = simplekv.db.mongo.MongoStore(db=mongoDatabase,collection="tokens")
@@ -30,7 +29,7 @@ jwt = JWTManager(app)
 CORS(app)
 
 
-api.add_resource(Test,"/api/test")
+api.add_resource(Test,"/test")
 
 api.add_resource(AddandGet,"/user",resource_class_kwargs={ 'auth_manager': authManager ,"database" : mongoDatabase})
 api.add_resource(DeleteUser,"/user/<user_id>",resource_class_kwargs={"database" : mongoDatabase})
