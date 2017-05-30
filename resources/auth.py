@@ -2,7 +2,6 @@ from flask_restful import fields, marshal_with, reqparse, Resource,HTTPException
 from flask_jwt_extended import create_access_token,jwt_required,get_raw_jwt
 from resources.schemas.auth import LoginRequest
 from flask import request
-from flask_jwt_extended.blacklist import get_token_ttlext
 
 class AuthLogin(Resource):
     def __init__(self,**kwargs):
