@@ -22,11 +22,11 @@ app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_STORE'] = simplekv.db.mongo.MongoStore(db=mongoDatabase,collection="tokens")
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = 'all'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(minutes=5)
+app.config['SERVER_NAME'] = "34.251.171.152"
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 rootLogger = logging.getLogger()
 jwt = JWTManager(app)
 CORS(app)
-
 
 
 api.add_resource(Test,"/test")
