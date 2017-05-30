@@ -30,7 +30,7 @@ jwt = JWTManager(app)
 CORS(app)
 
 
-api.add_resource(Test,"/test")
+api.add_resource(Test,"/api/test")
 
 api.add_resource(AddandGet,"/user",resource_class_kwargs={ 'auth_manager': authManager ,"database" : mongoDatabase})
 api.add_resource(DeleteUser,"/user/<user_id>",resource_class_kwargs={"database" : mongoDatabase})
