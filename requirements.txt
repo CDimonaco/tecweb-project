@@ -23,4 +23,5 @@ python-dateutil==2.6.0
 pytz==2017.2
 simplekv==0.10.0
 six==1.10.0
+termcolor==1.1.0
 Werkzeug==0.12.1
