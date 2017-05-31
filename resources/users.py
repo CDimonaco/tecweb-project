@@ -40,19 +40,6 @@ class AddandGet(Resource):
 
 
 
-
-
-
-
-class Test(Resource):
-
-    def post(self):
-        print(request.json["username"])
-        print(request.args.get("offset"))
-        return 200
-
-
-
 class DeleteUser(Resource):
 
     decorators = [jwt_required]

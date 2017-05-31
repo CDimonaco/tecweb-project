@@ -10,23 +10,26 @@ from flask_restful import Api
 from resources.auth import AuthLogin,AuthLogout
 from resources.users import AddandGet,DeleteUser
 from flask_jwt_extended import JWTManager
+from common.settings import persistenceSettings
 
 mongoClient = MongoClient()
-mongoDatabase = mongoClient["tecweb"]
+mongoDatabase = mongoClient[persistenceSettings["dbName"]]
+
 
 authManager = AuthManager(database=mongoDatabase)
+
 app = Flask(__name__)
 api_bp = Blueprint("api",__name__,url_prefix="/api")
 api = Api(api_bp)
 
+
 app.secret_key = "sosecretlol"
+
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_STORE'] = simplekv.db.mongo.MongoStore(db=mongoDatabase,collection="tokens")
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = 'all'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(minutes=15)
 
-logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
-rootLogger = logging.getLogger()
 jwt = JWTManager(app)
 
 
@@ -45,9 +48,7 @@ api.add_resource(AuthLogout,"/auth/logout",resource_class_kwargs={ 'auth_manager
 
 app.register_blueprint(api_bp)
 
+
+
 if __name__ == '__main__':
-    consoleHandler = logging.StreamHandler()
-    consoleHandler.setFormatter(logFormatter)
-    app.logger.setLevel(logging.DEBUG)
-    app.logger.addHandler(consoleHandler)
     app.run(threaded=True)

@@ -2,6 +2,8 @@ from flask_restful import fields, marshal_with, reqparse, Resource,HTTPException
 from flask_jwt_extended import create_access_token,jwt_required,get_raw_jwt
 from resources.schemas.auth import LoginRequest
 from flask import request
+import logging
+
 
 class AuthLogin(Resource):
     def __init__(self,**kwargs):
@@ -14,7 +16,6 @@ class AuthLogin(Resource):
             return validation,500
         username = request.json["username"]
         password = request.json["password"]
-        print(username,password)
         result,role = self.authManager.login(username,password)
         if result:
             token = create_access_token(identity=result)
