@@ -20,7 +20,7 @@ from common.exceptions.sensors import SensorNotFoundError,SensorAddError
 from common.exceptions.values import ValueAddError,ValueNotFoundError
 from common.exceptions.project import ProjectNotFoundError,ProjectAddError
 
-"""
+
 class TestUserService(TestCase):
     def setUp(self):
         self.database = MongoClient().tecweb
@@ -54,7 +54,6 @@ class TestUserService(TestCase):
             self.fail(e)
         print(insertedid)
 
-"""
 
 
 class TestSensorService(TestCase):
@@ -62,15 +61,15 @@ class TestSensorService(TestCase):
         self.database = MongoClient().tecweb
         self.service = SensorService(self.database)
 
-    """def test_addsensor(self):
+    def test_addsensor(self):
         testsensor = Sensor(name="Testsensor",apikey="8598984908092083098093",project="591ff9458e2b82f3872c111b")
         try:
             insertedid = self.service.add(testsensor)
         except SensorAddError as e:
             self.fail(e)
-        print(insertedid)"""
+        print(insertedid)
 
-    """def test_findsensor(self):
+    def test_findsensor(self):
         filter = SensorFilter(id="5921ceef47488822d7b72931")
         expectedsensor = Sensor(id="5921ceef47488822d7b72931",name="Temperatura 04",project="591ff9458e2b82f3872c111b",apikey="870968098489084509854")
         try:
@@ -80,9 +79,9 @@ class TestSensorService(TestCase):
         print(expectedsensor)
         print(sensorfound[0])
 
-        self.assertTrue(sensorfound[0].__eq__(expectedsensor))"""
+        self.assertTrue(sensorfound[0].__eq__(expectedsensor))
 
-    """def test_findsensorpagination(self):
+    def test_findsensorpagination(self):
         filter = SensorFilter()
         hasmore = True
         offset = 0
@@ -90,11 +89,9 @@ class TestSensorService(TestCase):
         while hasmore:
             sensorfound,hasmore = self.service.find(filter=filter,offset=offset)
             offset = offset + limit
-            print(len(sensorfound),hasmore)"""
+            print(len(sensorfound),hasmore)
 
 
-
-    """
     def test_deletesensor(self):
         deletefilter = SensorFilter(id="5921b904ef43d217544829d1")
         try:
@@ -115,7 +112,7 @@ class TestSensorService(TestCase):
         expectedvalue = Value(value=893.288,timestamp=dateutil.parser.parse("2016-04-01T10:30:36.438Z"),additional="",id="591ffa1d8e2b82f3872c111c")
         timefilter = TimeFilter(timeto=datetime.datetime.now())
         print(timefilter.getConditions())
-        filter = ValueFilter(id="5921cf1824dcb4b5f1caf42d",timestamp=timefilter) #TODO:ADD COMPARISON TO EXPECTED VALUE BUT TEST WORKS
+        filter = ValueFilter(id="5921cf1824dcb4b5f1caf42d",timestamp=timefilter)
         try:
             values = self.service.getvalues(filter=filter)
         except ValueNotFoundError as e:
@@ -129,9 +126,9 @@ class TestSensorService(TestCase):
         except SensorNotFoundError as e:
             self.fail(e)
 
-"""
 
-"""class TestProjectService(TestCase):
+
+class TestProjectService(TestCase):
     def setUp(self):
         self.database = MongoClient().tecweb
         self.service = ProjectService(self.database)
@@ -158,8 +155,7 @@ class TestSensorService(TestCase):
         except (ProjectNotFoundError,SensorNotFoundError) as e:
             self.fail(e)
 
-"""
-import datetime
+
 class TestValueService(TestCase):
 
     def setUp(self):
@@ -217,7 +213,7 @@ class TestValueService(TestCase):
         insertedid = self.service.add(newvalue)
         print(insertedid)
 
-    """def test_findvaluespagination(self):
+    def test_findvaluespagination(self):
           filter = ValueFilter(sensorid="5921e8f8ef43d21ea51a29e6")
           hasmore = True
           offset = 0
@@ -230,5 +226,5 @@ class TestValueService(TestCase):
 
     def test_deletevalue(self):
         filter = ValueFilter()
-        self.service.delete(filter)"""
+        self.service.delete(filter)
 
