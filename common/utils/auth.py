@@ -1,4 +1,3 @@
-from common.settings import persistenceSettings,authSettings
 import flask_bcrypt
 from common.services.userservice import UserService
 from common.filters.users import UserFilter
@@ -6,8 +5,6 @@ from common.filters.orfilter import OrFilter
 from common.models.user import User
 from common.exceptions.auth import RegisterSameUserError
 from flask_jwt_extended import revoke_token,get_jwt_identity
-from flask_restful import abort
-import functools
 from common.filters.projects import ProjectFilter
 from common.services.projects import ProjectService
 

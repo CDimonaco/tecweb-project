@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 persistenceSettings = {
     "usersCollection" : "user",
@@ -12,3 +13,4 @@ authSettings = {
     "tokenLifeTime" : datetime.timedelta(minutes=15),
     "adminRole" : 1,
 }
+

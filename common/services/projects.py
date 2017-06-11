@@ -43,10 +43,8 @@ class ProjectService:
         :param projectid: Id del progetto da cancellare
         :return: True
         """
-        #db.getCollection('user').update({"_id" : ObjectId("591ff8f647488822d7b707d4")},{"$pull" : {"projects" : {"id":ObjectId("5921fa05ef43d223e643139f")}}})
         deleteprojectresult = self.collection.update_one({"_id": ObjectId(userid)}, {"$pull": {"projects": {"id" : ObjectId(projectid)}}})
         if deleteprojectresult.modified_count < 1:
-            #TODO:ADD LOG TO FLASK
             raise ProjectNotFoundError
         sensordeletefilter = SensorFilter(project=[projectid])
         deletesensorsresult = SensorService(self.collection.database).delete(sensordeletefilter)
