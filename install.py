@@ -14,9 +14,9 @@ def install():
         return
 
     print("\n")
-    print(colored("ANDRA INSTALLATION WIZARD".center(consolewidth),"red"))
+    print(colored("TecwebProject INSTALLATION WIZARD".center(consolewidth),"red"))
     print("\n")
-    print("github.com/cdimonaco/andra-be".center(consolewidth))
+    print("github.com/cdimonaco/tecweb-project".center(consolewidth))
     print("Esame di Tecnologie web".center(consolewidth))
     print("Di Monaco Carmine 0124001236".center(consolewidth))
     print("\nCon questa procedura potrai creare il primo account amministratore del sistema\n")
