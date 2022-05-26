@@ -1,13 +1,11 @@
-# A.N.D.R.A. - Backend 
+# TecwebProject - Backend 
 
 Parte del progetto per l'esame di Tecnologie web,
 Troviamo un servizio REST realizzato usando `Python 3`, `Flask`, `Flask-Restful`.
 
 Per la persistenza dei dati mi sono affidato a mongodb, usato nell'api tramite il driver `pymongo`
 
-## Cos'è A.N.D.R.A ?
-
-A.N.D.R.A. è una dashboard per la gestione e il monitoraggio di un pool di sensori.
+E' una dashboard per la gestione e il monitoraggio di un pool di sensori.
 
 I sensori sono divisi in progetti, ogni utente ha diritto a 25 progetti.
 
